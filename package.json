@@ -1,0 +1,35 @@
+{
+  "name": "caltrack",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "test": "tsx --test tests/*.test.ts tests/*.test.mjs",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "db:generate": "node scripts/drizzle-kit.cjs generate",
+    "db:migrate": "node scripts/drizzle-kit.cjs migrate",
+    "db:studio": "node scripts/drizzle-kit.cjs studio"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.18.0",
+    "better-auth": "^1.7.15",
+    "drizzle-orm": "^0.45.4",
+    "jose": "^6.2.15",
+    "next": "^15.5.6",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "sharp": "^0.35.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^22.18.6",
+    "@types/react": "^19.1.16",
+    "@types/react-dom": "^19.1.9",
+    "daisyui": "^5.7.50",
+    "drizzle-kit": "^0.31.4",
+    "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.2"
+  }
+}

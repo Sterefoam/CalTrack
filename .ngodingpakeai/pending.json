@@ -1,0 +1,756 @@
+{
+  "repo": "CalTrack",
+  "generatedForCommit": null,
+  "files": [
+    {
+      "path": ".claude/skills/ngodingpakeai/SKILL.md",
+      "reason": "needs_summary",
+      "language": "markdown",
+      "size": 19096
+    },
+    {
+      "path": ".codex/skills/ngodingpakeai/SKILL.md",
+      "reason": "needs_summary",
+      "language": "markdown",
+      "size": 19096
+    },
+    {
+      "path": ".gitignore",
+      "reason": "needs_summary",
+      "language": null,
+      "size": 140
+    },
+    {
+      "path": ".ngodingpakeaiignore",
+      "reason": "needs_summary",
+      "language": null,
+      "size": 283
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "needs_summary",
+      "language": "markdown",
+      "size": 18850
+    },
+    {
+      "path": "app/api/analyze/photo/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 1221
+    },
+    {
+      "path": "app/api/analyze/text/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 1167
+    },
+    {
+      "path": "app/api/analyze/voice/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 1219
+    },
+    {
+      "path": "app/api/auth/[...all]/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 441
+    },
+    {
+      "path": "app/api/chat/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 1659
+    },
+    {
+      "path": "app/api/dashboard/daily/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 1249
+    },
+    {
+      "path": "app/api/exercise-logs/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 3122
+    },
+    {
+      "path": "app/api/food-logs/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 2171
+    },
+    {
+      "path": "app/api/food-logs/[id]/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 2210
+    },
+    {
+      "path": "app/api/foods/barcode/[code]/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 958
+    },
+    {
+      "path": "app/api/foods/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 766
+    },
+    {
+      "path": "app/api/profile/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 1342
+    },
+    {
+      "path": "app/chat/page.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 132
+    },
+    {
+      "path": "app/globals.css",
+      "reason": "needs_summary",
+      "language": "css",
+      "size": 47097
+    },
+    {
+      "path": "app/history/page.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 134
+    },
+    {
+      "path": "app/layout.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 609
+    },
+    {
+      "path": "app/log/barcode/page.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 568
+    },
+    {
+      "path": "app/log/favorites/page.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 140
+    },
+    {
+      "path": "app/log/page.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 2182
+    },
+    {
+      "path": "app/log/photo/page.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 525
+    },
+    {
+      "path": "app/log/review/page.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 127
+    },
+    {
+      "path": "app/log/search/page.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 134
+    },
+    {
+      "path": "app/log/text/page.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 120
+    },
+    {
+      "path": "app/log/voice/page.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 124
+    },
+    {
+      "path": "app/login/page.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 133
+    },
+    {
+      "path": "app/onboarding/page.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 143
+    },
+    {
+      "path": "app/page.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 6225
+    },
+    {
+      "path": "app/profile/page.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 131
+    },
+    {
+      "path": "app/register/page.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 141
+    },
+    {
+      "path": "components/auth/auth-form.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 4501
+    },
+    {
+      "path": "components/chat/nutrition-chat.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 4930
+    },
+    {
+      "path": "components/dashboard/calorie-card.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 2370
+    },
+    {
+      "path": "components/dashboard/dashboard-state.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 4168
+    },
+    {
+      "path": "components/dashboard/exercise-form.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 2230
+    },
+    {
+      "path": "components/dashboard/macro-chart.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 2951
+    },
+    {
+      "path": "components/dashboard/meal-history.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 2630
+    },
+    {
+      "path": "components/dashboard/water-tracker.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 2465
+    },
+    {
+      "path": "components/layout/app-shell.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 3433
+    },
+    {
+      "path": "components/layout/dialog.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 929
+    },
+    {
+      "path": "components/layout/icon.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 2206
+    },
+    {
+      "path": "components/logging/barcode-scanner.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 6689
+    },
+    {
+      "path": "components/logging/daily-history.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 4370
+    },
+    {
+      "path": "components/logging/favorite-button.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 789
+    },
+    {
+      "path": "components/logging/favorites-list.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 2641
+    },
+    {
+      "path": "components/logging/food-review.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 9221
+    },
+    {
+      "path": "components/logging/food-search.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 4341
+    },
+    {
+      "path": "components/logging/input-mode-picker.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 729
+    },
+    {
+      "path": "components/logging/nutrition-summary.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 3436
+    },
+    {
+      "path": "components/logging/photo-analysis.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 2928
+    },
+    {
+      "path": "components/logging/photo-capture.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 4322
+    },
+    {
+      "path": "components/logging/text-log.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 3768
+    },
+    {
+      "path": "components/logging/voice-log.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 6582
+    },
+    {
+      "path": "components/profile/onboarding-flow.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 4073
+    },
+    {
+      "path": "components/profile/profile-fields.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 2622
+    },
+    {
+      "path": "components/profile/profile-form.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 2972
+    },
+    {
+      "path": "db/client.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 552
+    },
+    {
+      "path": "db/schema.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 12806
+    },
+    {
+      "path": "docs/backend.md",
+      "reason": "needs_summary",
+      "language": "markdown",
+      "size": 3897
+    },
+    {
+      "path": "drizzle/0000_user-nutrition-schema.sql",
+      "reason": "needs_summary",
+      "language": "sql",
+      "size": 2137
+    },
+    {
+      "path": "drizzle/0001_profile-check-constraints.sql",
+      "reason": "needs_summary",
+      "language": "sql",
+      "size": 1759
+    },
+    {
+      "path": "drizzle/0002_daily-dashboard-logs.sql",
+      "reason": "needs_summary",
+      "language": "sql",
+      "size": 3417
+    },
+    {
+      "path": "drizzle/0003_auth-sessions-jwt.sql",
+      "reason": "needs_summary",
+      "language": "sql",
+      "size": 1956
+    },
+    {
+      "path": "drizzle/0004_food-catalog.sql",
+      "reason": "needs_summary",
+      "language": "sql",
+      "size": 2818
+    },
+    {
+      "path": "drizzle/0005_nutrition-chat.sql",
+      "reason": "needs_summary",
+      "language": "sql",
+      "size": 949
+    },
+    {
+      "path": "drizzle/meta/0000_snapshot.json",
+      "reason": "needs_summary",
+      "language": "json",
+      "size": 8227
+    },
+    {
+      "path": "drizzle/meta/0001_snapshot.json",
+      "reason": "needs_summary",
+      "language": "json",
+      "size": 8823
+    },
+    {
+      "path": "drizzle/meta/0002_snapshot.json",
+      "reason": "needs_summary",
+      "language": "json",
+      "size": 20793
+    },
+    {
+      "path": "drizzle/meta/0003_snapshot.json",
+      "reason": "needs_summary",
+      "language": "json",
+      "size": 29971
+    },
+    {
+      "path": "drizzle/meta/0004_snapshot.json",
+      "reason": "needs_summary",
+      "language": "json",
+      "size": 34004
+    },
+    {
+      "path": "drizzle/meta/0005_snapshot.json",
+      "reason": "needs_summary",
+      "language": "json",
+      "size": 37904
+    },
+    {
+      "path": "drizzle/meta/_journal.json",
+      "reason": "needs_summary",
+      "language": "json",
+      "size": 939
+    },
+    {
+      "path": "drizzle.config.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 262
+    },
+    {
+      "path": "lib/ai/food-analysis.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 4993
+    },
+    {
+      "path": "lib/ai/photo.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 1428
+    },
+    {
+      "path": "lib/ai/rate-limit.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 462
+    },
+    {
+      "path": "lib/ai/text.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 395
+    },
+    {
+      "path": "lib/ai/voice.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 2814
+    },
+    {
+      "path": "lib/auth/request.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 2188
+    },
+    {
+      "path": "lib/auth/server.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 1488
+    },
+    {
+      "path": "lib/auth/service.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 1645
+    },
+    {
+      "path": "lib/chat/service.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 5862
+    },
+    {
+      "path": "lib/dashboard/get-daily-summary.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 7042
+    },
+    {
+      "path": "lib/demo/barcode-product.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 609
+    },
+    {
+      "path": "lib/demo/food-catalog.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 2339
+    },
+    {
+      "path": "lib/demo/local-date.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 180
+    },
+    {
+      "path": "lib/demo/nutrition-chat.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 1761
+    },
+    {
+      "path": "lib/demo/nutrition-data.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 1856
+    },
+    {
+      "path": "lib/demo/photo-analysis.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 974
+    },
+    {
+      "path": "lib/demo/photo-result.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 510
+    },
+    {
+      "path": "lib/demo/profile.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 557
+    },
+    {
+      "path": "lib/food-logs/create-food-log.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 6165
+    },
+    {
+      "path": "lib/food-logs/history.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 3161
+    },
+    {
+      "path": "lib/food-logs/update-food-log.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 2088
+    },
+    {
+      "path": "lib/foods/catalog.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 4580
+    },
+    {
+      "path": "lib/http/json.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 1113
+    },
+    {
+      "path": "lib/http/multipart.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 1100
+    },
+    {
+      "path": "lib/logging/favorite-food.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 409
+    },
+    {
+      "path": "lib/logging/food-draft.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 1072
+    },
+    {
+      "path": "lib/logging/text-analysis-client.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 1148
+    },
+    {
+      "path": "lib/logging/voice-analysis-client.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 1124
+    },
+    {
+      "path": "lib/nutrition/aggregate-macros.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 1124
+    },
+    {
+      "path": "lib/nutrition/calorie-balance.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 542
+    },
+    {
+      "path": "lib/nutrition/profile.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 2320
+    },
+    {
+      "path": "lib/profile/service.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 2037
+    },
+    {
+      "path": "next.config.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 144
+    },
+    {
+      "path": "package-lock.json",
+      "reason": "needs_summary",
+      "language": "json",
+      "size": 126869
+    },
+    {
+      "path": "package.json",
+      "reason": "needs_summary",
+      "language": "json",
+      "size": 933
+    },
+    {
+      "path": "postcss.config.mjs",
+      "reason": "needs_summary",
+      "language": "javascript",
+      "size": 86
+    },
+    {
+      "path": "scripts/drizzle-kit.cjs",
+      "reason": "needs_summary",
+      "language": "javascript",
+      "size": 309
+    },
+    {
+      "path": "tests/analysis.test.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 4526
+    },
+    {
+      "path": "tests/auth.test.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 4038
+    },
+    {
+      "path": "tests/catalog.test.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 2362
+    },
+    {
+      "path": "tests/chat.test.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 2695
+    },
+    {
+      "path": "tests/dashboard.test.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 2974
+    },
+    {
+      "path": "tests/food-log.test.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 3563
+    },
+    {
+      "path": "tests/history.test.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 2278
+    },
+    {
+      "path": "tests/profile.test.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 3543
+    },
+    {
+      "path": "tests/schema.test.mjs",
+      "reason": "needs_summary",
+      "language": "javascript",
+      "size": 7757
+    },
+    {
+      "path": "tests/text-voice.test.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 2186
+    },
+    {
+      "path": "tsconfig.json",
+      "reason": "needs_summary",
+      "language": "json",
+      "size": 562
+    }
+  ]
+}

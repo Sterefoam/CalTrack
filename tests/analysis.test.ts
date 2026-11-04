@@ -1,0 +1,53 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+import sharp from "sharp";
+import { AnalysisError, parseFoodAnalysis, parseFoodAnalysisJson, requestFoodAnalysis } from "../lib/ai/food-analysis";
+import { analyzePhoto, normalizePhoto } from "../lib/ai/photo";
+import { readMultipart } from "../lib/http/multipart";
+const result = { items: [{ food_name: "Nasi", estimated_weight_grams: 200, calories: 260, macros: { protein_g: 5, carbs_g: 56, fat_g: 0.6 }, micros: { fiber_g: 0.8, sugar_g: 0.2, sodium_mg: 2 }, confidence_score: 0.88 }], confidence_score: 0.88 };
+const response = () => Response.json({ choices: [{ finish_reason: "stop", message: { content: JSON.stringify(result) } }] });
+test("vision sends a normalized image and validates the structured nutrition response", async () => {
+  const original = await sharp({ create: { width: 2000, height: 1000, channels: 3, background: "#448866" } }).jpeg().withMetadata().toBuffer();
+  const photo = new File([new Uint8Array(original)], "photo.jpg", { type: "image/jpeg" });
+  const normalized = await normalizePhoto(photo);
+  const metadata = await sharp(normalized).metadata();
+  assert.equal(metadata.width, 1600);
+  assert.equal(metadata.exif, undefined);
+  const analysis = await analyzePhoto(photo, new AbortController().signal, { apiKey: "test-only", fetcher: async (url, init) => {
+    assert.equal(url, "https://api.openai.com/v1/chat/completions");
+    const body = JSON.parse(String(init?.body));
+    assert.equal(body.store, false);
+    assert.equal(body.response_format.json_schema.strict, true);
+    assert.match(body.messages[1].content[1].image_url.url, /^data:image\/jpeg;base64,/);
+    return response();
+  } });
+  assert.equal(analysis.items[0].calories, 260);
+  assert.equal(analysis.items[0].weightGrams, 200);
+  assert.equal(analysis.requiresConfirmation, true);
+  await assert.rejects(normalizePhoto(new File(["not a photo"], "bad.jpg", { type: "image/jpeg" })), (error: unknown) => error instanceof AnalysisError && error.code === "invalid_photo");
+  await assert.rejects(normalizePhoto(new File([new Uint8Array(original)], "fake.png", { type: "image/png" })));
+});
+test("AI rejects empty, unsafe and incomplete nutrition and hides provider errors", async () => {
+  assert.throws(() => parseFoodAnalysisJson("```json\n{}\n```"), /invalid_ai_response/);
+  assert.throws(() => parseFoodAnalysisJson("{broken"), /invalid_ai_response/);
+  assert.throws(() => parseFoodAnalysis({ ...result, items: Array(21).fill(result.items[0]) }), /invalid_ai_response/);
+  const multiple = parseFoodAnalysis({ ...result, items: [result.items[0], { ...result.items[0], food_name: "Ayam", calories: 165 }] });
+  assert.equal(multiple.items.length, 2);
+  assert.equal(multiple.items.reduce((sum, item) => sum + item.calories, 0), 425);
+  assert.throws(() => parseFoodAnalysis({ items: [], confidence_score: 0 }), /no_food_detected/);
+  assert.throws(() => parseFoodAnalysis({ ...result, confidence_score: 2 }), /invalid_ai_response/);
+  assert.throws(() => parseFoodAnalysis({ ...result, items: [{ ...result.items[0], calories: -1 }] }), /invalid_ai_response/);
+  assert.throws(() => parseFoodAnalysis({ ...result, items: [{ ...result.items[0], micros: {} }] }), /invalid_ai_response/);
+  await assert.rejects(requestFoodAnalysis("Nasi", new AbortController().signal, { apiKey: "test-only", fetcher: async () => new Response("provider private details", { status: 429 }) }), (error: unknown) => error instanceof AnalysisError && error.code === "ai_rate_limited" && error.status === 503);
+  const abort = new AbortController(); abort.abort();
+  await assert.rejects(requestFoodAnalysis("Nasi", abort.signal, { apiKey: "test-only", fetcher: async (_url, init) => { init?.signal?.throwIfAborted(); return response(); } }), /analysis_cancelled/);
+});
+test("multipart upload validates content and enforces actual stream size", async () => {
+  const form = new FormData(); form.append("photo", new File(["image"], "test.jpg", { type: "image/jpeg" }));
+  const request = () => new Request("http://localhost/api/analyze/photo", { method: "POST", body: form });
+  assert.ok((await readMultipart(request())).get("photo") instanceof File);
+  const encoded = request();
+  const bytes = await encoded.arrayBuffer();
+  const incoming = new Request("http://localhost/api/analyze/photo", { method: "POST", headers: { "Content-Type": encoded.headers.get("content-type")! }, body: bytes });
+  await assert.rejects(readMultipart(incoming, 20), /payload_too_large/);
+});

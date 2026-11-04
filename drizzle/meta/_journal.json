@@ -1,0 +1,48 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1793639819223,
+      "tag": "0000_user-nutrition-schema",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1793639858261,
+      "tag": "0001_profile-check-constraints",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1793640343066,
+      "tag": "0002_daily-dashboard-logs",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1793679046904,
+      "tag": "0003_auth-sessions-jwt",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1793679219440,
+      "tag": "0004_food-catalog",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1793681352293,
+      "tag": "0005_nutrition-chat",
+      "breakpoints": true
+    }
+  ]
+}

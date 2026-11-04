@@ -1,0 +1,14 @@
+node_modules/
+.next/
+out/
+dist/
+.npm-cache/
+*.tsbuildinfo
+next-env.d.ts
+.env*
+!.env.example
+*.db
+*.db-shm
+*.db-wal
+.taste-skill/
+.caltrack/
