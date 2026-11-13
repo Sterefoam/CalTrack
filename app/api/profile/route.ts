@@ -1,7 +1,7 @@
 import { requireUser } from "@/lib/auth/request";
 import { InputError, readJson } from "@/lib/http/json";
 import { validateProfile } from "@/lib/nutrition/profile";
-import { getProfile, saveProfile } from "@/lib/profile/service";
+import { deleteProfile, getProfile, saveProfile } from "@/lib/profile/service";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export async function GET(request: Request) {
@@ -20,4 +20,12 @@ export async function PUT(request: Request) {
   } catch (error) {
     return Response.json({ error: error instanceof InputError ? error.code : "profile_unavailable" }, { status: error instanceof InputError ? error.status : 500 });
   }
+}
+export async function DELETE(request: Request) {
+  const identity = await requireUser(request);
+  if (identity instanceof Response) return identity;
+  try {
+    await deleteProfile(identity.userId);
+    return new Response(null, { status: 204, headers: { "Cache-Control": "no-store" } });
+  } catch { return Response.json({ error: "profile_unavailable" }, { status: 500 }); }
 }

@@ -8,7 +8,7 @@ const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
 const maxSize = 10 * 1024 * 1024;
 
 export function PhotoCapture() {
-  const { photoFile, setPhotoFile } = useDashboardState();
+  const { photoFile, setPhotoFile, mode } = useDashboardState();
   const camera = useRef<HTMLInputElement>(null);
   const gallery = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState("");
@@ -46,7 +46,7 @@ export function PhotoCapture() {
       </div>
       <input ref={camera} type="file" accept={allowedTypes.join(",")} capture="environment" onChange={fileChange} className="sr-only" tabIndex={-1} aria-label="Ambil foto makanan dengan kamera" />
       <input ref={gallery} type="file" accept={allowedTypes.join(",")} onChange={fileChange} className="sr-only" tabIndex={-1} aria-label="Pilih foto makanan dari galeri" />
-      <p id="photo-file-help" className="field-help photo-file-help">JPG, PNG, atau WebP, maksimal 10 MB. Foto tetap di perangkat pada mode demo.</p>
+      <p id="photo-file-help" className="field-help photo-file-help">JPG, PNG, atau WebP, maksimal 10 MB. {mode === "demo" ? "Foto tetap di perangkat pada mode demo." : "Foto dikirim ke layanan AI saat analisis dimulai."}</p>
       <div className="photo-actions"><button type="button" className="ui-btn ui-btn-primary" aria-describedby="photo-file-help" onClick={() => camera.current?.click()}>Ambil foto</button><button type="button" className="ui-btn" aria-describedby="photo-file-help" onClick={() => gallery.current?.click()}>Pilih dari galeri</button></div>
       {error && <p className="ui-alert ui-alert-error mt-4" role="alert">{error}</p>}
       {photoFile && <div className="photo-selection"><span className="selected-file">{photoFile.name}</span><button type="button" className="ui-btn ui-btn-ghost" onClick={() => { setPhotoFile(null); setError(""); }}>Hapus foto</button></div>}

@@ -182,6 +182,37 @@ export const foodLogItems = sqliteTable(
   ]
 );
 
+export const favorites = sqliteTable("favorites", {
+  id: text("id").primaryKey().$defaultFn(() => randomUUID()),
+  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  inputMethod: text("input_method", { enum: ["photo", "voice", "text", "barcode", "search", "chat", "recipe"] }).notNull(),
+  createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull().$defaultFn(() => new Date())
+}, table => [
+  index("favorites_user_created_idx").on(table.userId, table.createdAt),
+  check("favorites_input_method_valid", sql`${table.inputMethod} IN ('photo', 'voice', 'text', 'barcode', 'search', 'chat', 'recipe')`)
+]);
+
+export const favoriteItems = sqliteTable("favorite_items", {
+  id: text("id").primaryKey().$defaultFn(() => randomUUID()),
+  favoriteId: text("favorite_id").notNull().references(() => favorites.id, { onDelete: "cascade" }),
+  position: integer("position").notNull(),
+  foodId: text("food_id").references(() => foods.id, { onDelete: "set null" }),
+  foodName: text("food_name").notNull(),
+  weightGrams: real("weight_grams").notNull(),
+  calories: real("calories").notNull(),
+  proteinG: real("protein_g").notNull(),
+  carbsG: real("carbs_g").notNull(),
+  fatG: real("fat_g").notNull(),
+  fiberG: real("fiber_g").notNull(),
+  sugarG: real("sugar_g").notNull(),
+  sodiumMg: real("sodium_mg").notNull()
+}, table => [
+  uniqueIndex("favorite_items_position_unique").on(table.favoriteId, table.position),
+  check("favorite_items_position_valid", sql`${table.position} BETWEEN 0 AND 19`),
+  check("favorite_items_weight_positive", sql`${table.weightGrams} > 0`),
+  check("favorite_items_nutrients_nonnegative", sql`${table.calories} >= 0 AND ${table.proteinG} >= 0 AND ${table.carbsG} >= 0 AND ${table.fatG} >= 0 AND ${table.fiberG} >= 0 AND ${table.sugarG} >= 0 AND ${table.sodiumMg} >= 0`)
+]);
+
 export const waterLogs = sqliteTable(
   "water_logs",
   {
@@ -239,3 +270,63 @@ export type NewFoodLog = typeof foodLogs.$inferInsert;
 export type FoodLogItem = typeof foodLogItems.$inferSelect;
 export type WaterLog = typeof waterLogs.$inferSelect;
 export type ExerciseLog = typeof exerciseLogs.$inferSelect;
+
+// Nutrition is per serving. Unknown micros/serving weight remain NULL.
+export const recipes = sqliteTable("recipes", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  mealType: text("meal_type", { enum: ["breakfast", "lunch", "dinner", "snack"] }).notNull(),
+  minutes: integer("minutes").notNull(),
+  servingWeightG: real("serving_weight_g"),
+  calories: real("calories").notNull(),
+  proteinG: real("protein_g").notNull(),
+  carbsG: real("carbs_g").notNull(),
+  fatG: real("fat_g").notNull(),
+  fiberG: real("fiber_g"),
+  sugarG: real("sugar_g"),
+  sodiumMg: real("sodium_mg"),
+  allergens: text("allergens").notNull(),
+  source: text("source", { enum: ["example", "curated"] }).notNull(),
+  createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull().$defaultFn(() => new Date())
+}, table => [
+  index("recipes_meal_calories_idx").on(table.mealType, table.calories),
+  check("recipes_name_valid", sql`length(trim(${table.name})) BETWEEN 1 AND 120`),
+  check("recipes_meal_valid", sql`${table.mealType} IN ('breakfast', 'lunch', 'dinner', 'snack')`),
+  check("recipes_minutes_valid", sql`${table.minutes} BETWEEN 1 AND 1440`),
+  check("recipes_serving_valid", sql`${table.servingWeightG} IS NULL OR ${table.servingWeightG} > 0`),
+  check("recipes_macros_valid", sql`${table.calories} >= 0 AND ${table.proteinG} >= 0 AND ${table.carbsG} >= 0 AND ${table.fatG} >= 0`),
+  check("recipes_micros_valid", sql`(${table.fiberG} IS NULL OR ${table.fiberG} >= 0) AND (${table.sugarG} IS NULL OR ${table.sugarG} >= 0) AND (${table.sodiumMg} IS NULL OR ${table.sodiumMg} >= 0)`),
+  check("recipes_source_valid", sql`${table.source} IN ('example', 'curated')`)
+]);
+export const recipeIngredients = sqliteTable("recipe_ingredients", {
+  id: text("id").primaryKey().$defaultFn(() => randomUUID()),
+  recipeId: text("recipe_id").notNull().references(() => recipes.id, { onDelete: "cascade" }),
+  position: integer("position").notNull(),
+  label: text("label").notNull()
+}, table => [
+  uniqueIndex("recipe_ingredients_position_unique").on(table.recipeId, table.position),
+  check("recipe_ingredients_position_valid", sql`${table.position} >= 0`),
+  check("recipe_ingredients_label_valid", sql`length(trim(${table.label})) BETWEEN 1 AND 500`)
+]);
+export const recipeSteps = sqliteTable("recipe_steps", {
+  id: text("id").primaryKey().$defaultFn(() => randomUUID()),
+  recipeId: text("recipe_id").notNull().references(() => recipes.id, { onDelete: "cascade" }),
+  position: integer("position").notNull(),
+  instruction: text("instruction").notNull()
+}, table => [
+  uniqueIndex("recipe_steps_position_unique").on(table.recipeId, table.position),
+  check("recipe_steps_position_valid", sql`${table.position} >= 0`),
+  check("recipe_steps_instruction_valid", sql`length(trim(${table.instruction})) BETWEEN 1 AND 2000`)
+]);
+export type Recipe = typeof recipes.$inferSelect;
+
+export const recipeFavorites = sqliteTable("recipe_favorites", {
+  id: text("id").primaryKey().$defaultFn(() => randomUUID()),
+  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  recipeId: text("recipe_id").notNull().references(() => recipes.id, { onDelete: "cascade" }),
+  createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull().$defaultFn(() => new Date())
+}, table => [
+  uniqueIndex("recipe_favorites_user_recipe_unique").on(table.userId, table.recipeId),
+  index("recipe_favorites_user_created_idx").on(table.userId, table.createdAt)
+]);

@@ -18,7 +18,7 @@ import { localDateString } from "@/lib/demo/local-date";
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { waterMl, setWaterMl, exerciseLogs, setExerciseLogs, foodLogs, targets, profile, savedNotice, setSavedNotice } = useDashboardState();
+  const { waterMl, setWaterMl, exerciseLogs, setExerciseLogs, foodLogs, targets, profile, savedNotice, setSavedNotice, mode } = useDashboardState();
   const [showExerciseModal, setShowExerciseModal] = useState(false);
   const [detail, setDetail] = useState<string | null>(null);
   const [todayKey, setTodayKey] = useState("");
@@ -48,7 +48,7 @@ export default function DashboardPage() {
             <div>
               
               <h1>Hari ini, {profile.name.split(" ")[0]}</h1>
-              <p className="welcome-subtitle">{today} &middot; Data contoh</p>
+              <p className="welcome-subtitle">{today} &middot; {mode === "account" ? "Catatan akun" : "Data contoh"}</p>
             </div>
             <Link className="ui-btn ui-btn-primary" href="/log" aria-label="Catat makanan"><Icon name="plus" size={19} /> Catat makanan</Link>
           </div>
@@ -63,6 +63,7 @@ export default function DashboardPage() {
             <MealHistory sessions={mealSessions} onAdd={() => router.push("/log")} onViewAll={() => router.push("/history")} onMealClick={setDetail} />
 
             <div className="side-widgets">
+              <p className="field-help">Perubahan air minum dan olahraga berlaku selama sesi ini. {mode === "account" ? "Muat ulang untuk mengambil kembali catatan akun yang tersimpan." : "Muat ulang akan mengembalikan data contoh."}</p>
               <WaterTracker amountMl={waterMl} targetMl={targets.waterMl} onAdd={(amount) => setWaterMl((value) => Math.min(value + amount, 20000))} onRemove={(amount) => setWaterMl((value) => Math.max(0, value - amount))} onReset={() => setWaterMl(0)} />
               <article className="exercise-card">
                 <div className="exercise-icon"><Icon name="fire" size={21}/></div>
@@ -74,7 +75,7 @@ export default function DashboardPage() {
 
 
         </div>
-      {showExerciseModal && <ExerciseForm onClose={() => setShowExerciseModal(false)} onSave={(log) => { setExerciseLogs((current) => [...current, log]); setShowExerciseModal(false); notify(`${log.activity} berhasil dicatat`); }} />}
+      {showExerciseModal && <ExerciseForm onClose={() => setShowExerciseModal(false)} onSave={(log) => { setExerciseLogs((current) => [...current, log]); setShowExerciseModal(false); notify(`${log.activity} ditambahkan untuk sesi ini`); }} />}
       {detail && <Dialog title={detail === "nutrisi" ? "Asupan gizi hari ini" : detail === "riwayat" ? "Catatan hari ini" : selectedFood?.foodName ?? "Detail makanan"} onClose={() => setDetail(null)}>
         {detail === "riwayat" ? <div className="mt-4 space-y-4">{dailyLogs.map((log) => <div key={log.id}><strong>{mealLabels[log.mealType]} &middot; {log.time}</strong>{log.items.map((item) => <p key={item.foodName}>{item.foodName} &middot; {formatNumber(item.calories)} kkal</p>)}</div>)}</div> : (() => {
           const data = detail === "nutrisi" ? totals : selectedFood;

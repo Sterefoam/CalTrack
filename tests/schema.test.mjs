@@ -5,6 +5,30 @@ import { drizzle } from 'drizzle-orm/libsql';
 import { migrate } from 'drizzle-orm/libsql/migrator';
 import { readMigrationFiles } from 'drizzle-orm/migrator';
 
+test('favorites preserve multi-item snapshots and cascade on owner deletion', async () => {
+  const client = createClient({ url: ':memory:' });
+  try {
+    await migrate(drizzle(client), { migrationsFolder: './drizzle' });
+    await client.execute('PRAGMA foreign_keys = ON');
+    await client.execute("INSERT INTO users (id,email,name,password_hash,created_at) VALUES ('owner','favorite@example.test','Test','test-only',1)");
+    await client.execute("INSERT INTO favorites (id,user_id,input_method,created_at) VALUES ('favorite','owner','search',1)");
+    const insert = (id, position, calories = 100) => client.execute({
+      sql: 'INSERT INTO favorite_items (id,favorite_id,position,food_name,weight_grams,calories,protein_g,carbs_g,fat_g,fiber_g,sugar_g,sodium_mg) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)',
+      args: [id,'favorite',position,'Makanan uji',100,calories,5,10,2,1,0,10]
+    });
+    await insert('one', 0); await insert('two', 1);
+    await assert.rejects(insert('duplicate', 1), /UNIQUE/);
+    await assert.rejects(insert('negative', 2, -1), /CHECK/);
+    await assert.rejects(insert('too-many', 20), /CHECK/);
+    await assert.rejects(client.execute("INSERT INTO favorites (id,user_id,input_method,created_at) VALUES ('orphan','missing','search',1)"), /FOREIGN KEY/);
+    assert.equal((await client.execute('SELECT count(*) AS total FROM favorite_items')).rows[0].total, 2);
+    await client.execute("DELETE FROM users WHERE id='owner'");
+    assert.equal((await client.execute('SELECT count(*) AS total FROM favorites')).rows[0].total, 0);
+    assert.equal((await client.execute('SELECT count(*) AS total FROM favorite_items')).rows[0].total, 0);
+    assert.deepEqual((await client.execute('PRAGMA foreign_key_check')).rows, []);
+  } finally { client.close(); }
+});
+
 test('migrations enforce user/profile ownership and retain target history', async () => {
   const client = createClient({ url: ':memory:' });
   try {

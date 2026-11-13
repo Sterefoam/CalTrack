@@ -6,6 +6,7 @@ import { eq } from "drizzle-orm";
 import { requireUser } from "@/lib/auth/request";
 import { InputError, readJson } from "@/lib/http/json";
 import { getFoodHistory, parseHistoryQuery } from "@/lib/food-logs/history";
+import { resolveCatalogPortions } from "@/lib/foods/portions";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -27,7 +28,7 @@ export async function POST(request: Request) {
 
   let body: unknown;
   try {
-    body = await readJson(request);
+    body = await resolveCatalogPortions(await readJson(request));
   } catch (error) {
     return NextResponse.json({ error: error instanceof InputError ? error.code : "invalid_json" }, { status: error instanceof InputError ? error.status : 400 });
   }
@@ -42,8 +43,8 @@ export async function POST(request: Request) {
     if (!user) return NextResponse.json({ error: "user_not_found" }, { status: 404 });
     const foodLog = await createFoodLog(userId, validation.value);
     return NextResponse.json(foodLog, { status: 201, headers: { "Cache-Control": "no-store" } });
-  } catch (error) {
-    console.error("Gagal menyimpan catatan makanan", error);
+  } catch {
+    console.error("food_log_save_failed");
     return NextResponse.json({ error: "food_log_unavailable" }, { status: 500 });
   }
 }

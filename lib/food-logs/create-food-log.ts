@@ -9,6 +9,7 @@ type MealType = (typeof MEAL_TYPES)[number];
 type InputMethod = (typeof INPUT_METHODS)[number];
 
 type FoodItemInput = {
+  foodId?: string | null;
   foodName: string;
   weightGrams: number;
   calories: number;
@@ -50,6 +51,7 @@ export function validateFoodLogInput(input: unknown): ValidationResult {
   for (const [index, rawItem] of input.items.entries()) {
     if (!isRecord(rawItem)) return { error: `Item ke-${index + 1} tidak valid.` };
     const foodName = typeof rawItem.foodName === "string" ? rawItem.foodName.trim() : "";
+    if (rawItem.foodId != null && (typeof rawItem.foodId !== "string" || !rawItem.foodId || rawItem.foodId.length > 128)) return { error: "foodId tidak valid." };
     if (foodName.length < 1 || foodName.length > 120) return { error: `Nama makanan ke-${index + 1} harus 1–120 karakter.` };
     if (!finiteNumber(rawItem.weightGrams, 0.1, 10000)) return { error: `weightGrams item ke-${index + 1} harus antara 0,1 dan 10.000.` };
     const limits: Array<[keyof FoodItemInput, number]> = [
@@ -60,6 +62,7 @@ export function validateFoodLogInput(input: unknown): ValidationResult {
       if (!finiteNumber(rawItem[field], 0, max)) return { error: `${field} item ke-${index + 1} harus angka antara 0 dan ${max}.` };
     }
     items.push({
+      ...(rawItem.foodId == null ? {} : { foodId: rawItem.foodId as string }),
       foodName,
       weightGrams: rawItem.weightGrams,
       calories: rawItem.calories as number,
@@ -143,6 +146,7 @@ export async function createFoodLog(userId: string, input: CreateFoodLogInput, d
     await tx.insert(foodLogItems).values(input.items.map((item) => ({
       id: randomUUID(),
       foodLogId: logId,
+      foodId: item.foodId,
       foodName: item.foodName,
       weightGrams: item.weightGrams,
       calories: item.calories,

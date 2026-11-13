@@ -9,8 +9,14 @@ import { createFoodDraft } from "@/lib/logging/food-draft";
 import { NutritionSummary } from "./nutrition-summary";
 import { formatNumber } from "@/lib/demo/nutrition-data";
 import { FavoriteButton } from "./favorite-button";
+import { AccountCatalog } from "./account-catalog";
 
 export function BarcodeScanner() {
+  const { mode } = useDashboardState();
+  return mode === "account" ? <AccountCatalog barcode /> : <DemoBarcodeScanner />;
+}
+
+function DemoBarcodeScanner() {
   const [active, setActive] = useState(false);
   const [starting, setStarting] = useState(false);
   const [error, setError] = useState("");

@@ -3,6 +3,8 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { db } from "@/db/client";
 import { createAuth } from "./service";
+import { after } from "next/server.js";
+import { passwordResetSender } from "./password-email";
 
 export class AuthConfigurationError extends Error {}
 let instance: ReturnType<typeof createAuth> | undefined;
@@ -27,6 +29,14 @@ export function getAuth() {
   if (instance) return instance;
   const secret = process.env.BETTER_AUTH_SECRET ?? (process.env.NODE_ENV !== "production" ? developmentSecret() : undefined);
   if (!secret || secret.length < 32) throw new AuthConfigurationError("BETTER_AUTH_SECRET minimal 32 karakter diperlukan.");
-  instance = createAuth(db, { secret, baseURL: authOrigin(), production: process.env.NODE_ENV === "production" });
+  instance = createAuth(db, {
+    secret, baseURL: authOrigin(), production: process.env.NODE_ENV === "production",
+    sendPasswordReset: passwordResetSender({ apiKey: process.env.RESEND_API_KEY, from: process.env.AUTH_EMAIL_FROM }),
+    runInBackground: (task) => {
+      // Catch immediately so rejected deliveries never become unhandled or leak provider details.
+      const settled = task.catch(() => { console.error("password_email_delivery_failed"); });
+      after(async () => { await settled; });
+    }
+  });
   return instance;
 }

@@ -8,5 +8,5 @@ import { sameFoodItems } from "@/lib/logging/favorite-food";
 export function FavoriteButton({ items, inputMethod }: { items: FoodItem[]; inputMethod: InputMethod }) {
   const { favorites, addFavorite, removeFavorite } = useDashboardState();
   const existing = favorites.find((favorite) => sameFoodItems(favorite.items, items));
-  return <button type="button" className="ui-btn w-full mt-4" aria-pressed={!!existing} onClick={() => existing ? removeFavorite(existing.id) : addFavorite({ inputMethod, items })}>{existing ? "Hapus dari favorit" : "Simpan ke favorit"}</button>;
+  return <div><button type="button" className="ui-btn w-full mt-4" aria-pressed={!!existing} onClick={() => existing ? removeFavorite(existing.id) : addFavorite({ inputMethod, items })}>{existing ? "Hapus dari favorit" : "Simpan ke favorit"}</button><p className="field-help mt-2">Favorit tersedia selama sesi browser ini.</p></div>;
 }

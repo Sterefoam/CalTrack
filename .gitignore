@@ -12,3 +12,6 @@ next-env.d.ts
 *.db-wal
 .taste-skill/
 .caltrack/
+.playwright-mcp/
+__pycache__/
+*.py[cod]

@@ -5,7 +5,7 @@ import { drizzle } from "drizzle-orm/libsql";
 import { migrate } from "drizzle-orm/libsql/migrator";
 import * as schema from "../db/schema";
 import { calculateTargets, validateProfile, type PhysicalProfile } from "../lib/nutrition/profile";
-import { getProfile, saveProfile } from "../lib/profile/service";
+import { deleteProfile, getProfile, saveProfile } from "../lib/profile/service";
 import { readJson, InputError } from "../lib/http/json";
 const profile: PhysicalProfile = { name: " Test ", age: 28, gender: "male", weightKg: 75, heightCm: 175, activityLevel: "light", goal: "maintenance" };
 test("BMR/TDEE matches manual calculation and rejects invalid physical inputs", () => {
@@ -40,6 +40,15 @@ test("profile updates and target history commit together and remain scoped to th
     assert.equal((await database.select().from(schema.nutritionTargets)).length, 2);
     await assert.rejects(saveProfile("missing", profile, database));
     assert.equal((await database.select().from(schema.nutritionTargets)).length, 2);
+    await saveProfile("b", { ...profile, name: "B" }, database);
+    await database.insert(schema.foodLogs).values({ id: "keep-log", userId: "a", mealType: "lunch", inputMethod: "search", loggedAt: new Date() });
+    await deleteProfile("a", database);
+    await deleteProfile("a", database);
+    assert.equal(await getProfile("a", database), null);
+    assert.ok(await getProfile("b", database));
+    assert.equal((await database.select().from(schema.nutritionTargets)).length, 1);
+    assert.equal((await database.select().from(schema.users)).length, 2);
+    assert.equal((await database.select().from(schema.foodLogs)).length, 1);
   } finally { client.close(); }
 });
 test("JSON body limit applies even without a content-length header", async () => {

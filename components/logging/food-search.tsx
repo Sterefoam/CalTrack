@@ -9,8 +9,14 @@ import { formatNumber } from "@/lib/demo/nutrition-data";
 import { NutritionSummary } from "./nutrition-summary";
 import { InputModePicker } from "./input-mode-picker";
 import { FavoriteButton } from "./favorite-button";
+import { AccountCatalog } from "./account-catalog";
 
 export function FoodSearch() {
+  const { mode } = useDashboardState();
+  return mode === "account" ? <AccountCatalog /> : <DemoFoodSearch />;
+}
+
+function DemoFoodSearch() {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("Semua kategori");
   const [selected, setSelected] = useState<CatalogFood | null>(null);

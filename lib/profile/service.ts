@@ -23,3 +23,10 @@ export async function saveProfile(userId: string, profile: PhysicalProfile, data
     return { profile, targets, effectiveFrom };
   });
 }
+
+export async function deleteProfile(userId: string, database = db) {
+  await database.transaction(async tx => {
+    await tx.delete(nutritionTargets).where(eq(nutritionTargets.userId, userId));
+    await tx.delete(userProfiles).where(eq(userProfiles.userId, userId));
+  });
+}

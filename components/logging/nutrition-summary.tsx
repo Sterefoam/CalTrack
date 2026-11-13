@@ -4,7 +4,7 @@ import { useState } from "react";
 import { formatNumber, sumNutrition, type FoodItem } from "@/lib/demo/nutrition-data";
 import { nutritionFields } from "@/lib/logging/food-draft";
 
-export function NutritionSummary({ items, confidenceScore = null }: { items: FoodItem[]; confidenceScore?: number | null }) {
+export function NutritionSummary({ items, confidenceScore = null, demo = true }: { items: FoodItem[]; confidenceScore?: number | null; demo?: boolean }) {
   const [basis, setBasis] = useState<"portion" | "100g">("portion");
   const totals = sumNutrition(items);
   const totalGrams = items.reduce((sum, item) => sum + item.weightGrams, 0);
@@ -28,6 +28,6 @@ export function NutritionSummary({ items, confidenceScore = null }: { items: Foo
     <p className="nutrition-basis-label">{basis === "portion" ? `${items.length} komponen · ${formatNumber(totalGrams)} g total` : "Nilai setara untuk 100 g hidangan"}</p>
     <section className="macro-composition" aria-label="Komposisi energi dari makronutrisi"><h3>Energi dari makro</h3><div className="macro-stacked-bar" role="img" aria-label={macroCalories ? composition : "Belum ada energi makronutrisi"}>{series.map((entry, index) => <span key={entry.label} className={entry.className} style={{ width: `${shares[index]}%` }} />)}</div><ul className="macro-composition-legend">{series.map((entry, index) => <li key={entry.label}><span className={`legend-dot ${entry.className}`} aria-hidden="true" />{entry.label}<strong>{shares[index]}%</strong></li>)}</ul></section>
     <dl className="nutrition-facts">{nutritionFields.filter((field) => field.key !== "calories").map((field) => <div key={field.key}><dt>{field.label}</dt><dd>{formatNumber(totals[field.key] * factor)} {field.unit}</dd></div>)}</dl>
-    {confidenceScore !== null && <div className="confidence-summary"><div><span>Keyakinan deteksi contoh</span><strong>{Math.round(confidenceScore * 100)}%</strong></div><progress className="ui-progress w-full" aria-label="Skor keyakinan deteksi contoh" max={100} value={Math.round(confidenceScore * 100)} /><p>Estimasi perlu diperiksa; skor keyakinan bukan jaminan ketepatan gizi.</p></div>}
+    {confidenceScore !== null && <div className="confidence-summary"><div><span>{demo ? "Keyakinan deteksi contoh" : "Keyakinan deteksi AI"}</span><strong>{Math.round(confidenceScore * 100)}%</strong></div><progress className="ui-progress w-full" aria-label={demo ? "Skor keyakinan deteksi contoh" : "Skor keyakinan deteksi AI"} max={100} value={Math.round(confidenceScore * 100)} /><p>Estimasi perlu diperiksa; skor keyakinan bukan jaminan ketepatan gizi.</p></div>}
   </div>;
 }

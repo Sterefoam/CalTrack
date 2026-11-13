@@ -15,7 +15,7 @@ export function ExerciseForm({ onClose, onSave }: ExerciseFormProps) {
     onSave({ activity, durationMinutes: duration, caloriesBurned: calories });
   }
   return <Dialog title="Catat olahraga" onClose={onClose}>
-    <p className="photo-description mt-4">Tambahkan aktivitas untuk memperbarui sisa kalori hari ini.</p>
+    <p className="photo-description mt-4">Tambahkan aktivitas untuk memperbarui sisa kalori selama sesi ini. Perubahan belum disimpan ke akun.</p>
     <form className="form-stack mt-5" onSubmit={submit}>
       <label className="field-label" htmlFor="exercise-activity">Jenis aktivitas<select id="exercise-activity" className="ui-select w-full" value={activity} onChange={(e) => setActivity(e.target.value)}><option>Jalan cepat</option><option>Lari</option><option>Bersepeda</option><option>Latihan beban</option><option>Renang</option><option>Aktivitas lain</option></select></label>
       <div className="field-grid"><label className="field-label" htmlFor="exercise-duration">Durasi (menit)<input id="exercise-duration" className="ui-input w-full" type="number" min={1} max={1440} step={1} required value={duration || ""} onChange={(e) => setDuration(Number(e.target.value))} /></label><label className="field-label" htmlFor="exercise-calories">Kalori terbakar (kkal)<input id="exercise-calories" className="ui-input w-full" type="number" min={0} max={20000} step={1} required value={calories} onChange={(e) => setCalories(Number(e.target.value))} /></label></div>

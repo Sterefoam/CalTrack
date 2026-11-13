@@ -1,6 +1,7 @@
 import { requireUser } from "@/lib/auth/request";
 import { InputError, readJson } from "@/lib/http/json";
 import { validateFoodLogInput } from "@/lib/food-logs/create-food-log";
+import { resolveCatalogPortions } from "@/lib/foods/portions";
 import { deleteFoodLog, FoodLogNotFound, getFoodLog, updateFoodLog } from "@/lib/food-logs/update-food-log";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -18,7 +19,7 @@ export async function PATCH(request: Request, context: Context) {
   try {
     const id = (await context.params).id;
     const current = await getFoodLog(identity.userId, id);
-    const body = await readJson(request);
+    const body = await resolveCatalogPortions(await readJson(request));
     if (!body || typeof body !== "object" || Array.isArray(body)) throw new InputError("invalid_food_log");
     const input = validateFoodLogInput({ ...current, loggedAt: current.loggedAt.toISOString(), ...body });
     if ("error" in input) return Response.json({ error: "invalid_food_log", message: input.error }, { status: 400 });

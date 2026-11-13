@@ -1,7 +1,7 @@
 import type { FoodItem, MealType } from "@/lib/demo/nutrition-data";
 
 export type InputMethod = "photo" | "voice" | "text" | "barcode" | "search";
-export type FoodDraft = { id: string; inputMethod: InputMethod; mealType: MealType; confidenceScore: number | null; items: FoodItem[]; notes: string; origin?: "favorite" | "manual" };
+export type FoodDraft = { id: string; inputMethod: InputMethod; mealType: MealType; confidenceScore: number | null; items: FoodItem[]; notes: string; origin?: "favorite" | "manual" | "recipe" | "analysis" | "catalog" };
 
 export function createFoodDraft(inputMethod: InputMethod, items: FoodItem[], confidenceScore: number | null = null): FoodDraft {
   return { id: crypto.randomUUID(), inputMethod, mealType: "lunch", confidenceScore, items: structuredClone(items), notes: "" };

@@ -9,7 +9,7 @@ export function normalizeBarcode(value: string) {
   return code;
 }
 function nutrient(value: unknown, max: number): number | null {
-  if (value === undefined || value === null || value === "") return null;
+  if (value === undefined || value === null || (typeof value === "string" && !value.trim())) return null;
   const number = typeof value === "string" ? Number(value) : value;
   return typeof number === "number" && Number.isFinite(number) && number >= 0 && number <= max ? number : null;
 }
@@ -46,8 +46,9 @@ export async function lookupBarcode(raw: string, signal: AbortSignal, options: {
   if (!response.ok) throw new InputError("food_provider_unavailable", 503);
   let data;
   try { data = await response.json(); } catch { throw new InputError("invalid_food_provider_response", 502); }
+  if (!data || typeof data !== "object" || Array.isArray(data)) throw new InputError("invalid_food_provider_response", 502);
   if (data.status === 0) return { status: "not_found" as const, barcode };
-  if (data.status !== 1 || !data.product || typeof data.product !== "object") throw new InputError("invalid_food_provider_response", 502);
+  if (data.status !== 1 || !data.product || typeof data.product !== "object" || Array.isArray(data.product)) throw new InputError("invalid_food_provider_response", 502);
   const parsed = parseOpenFoodProduct(data.product, barcode);
   if (parsed.missingFields.length) return { status: "incomplete" as const, product: parsed };
   const value = { name: parsed.name, brand: parsed.brand, barcode, servingSizeG: parsed.servingSizeG, source: "openfoodfacts" as const, ...parsed.nutrition } as typeof foods.$inferInsert;
