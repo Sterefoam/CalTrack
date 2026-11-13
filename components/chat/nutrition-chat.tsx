@@ -1,51 +1,76 @@
 "use client";
-
 import Link from "next/link";
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import { useDashboardState } from "@/components/dashboard/dashboard-state";
-import { demoNutritionReply } from "@/lib/demo/nutrition-chat";
-import { formatNumber, sumNutrition } from "@/lib/demo/nutrition-data";
-import { localDateString } from "@/lib/demo/local-date";
-import { recipes } from "@/lib/demo/recipes";
-import { RecipeCard } from "@/components/recipes/recipe-card";
+import { api, browserTimeZone, jsonRequest } from "@/lib/client/api";
+import { Icon } from "@/components/layout/icon";
 
-const suggestions = ["Saran menu untuk sisa kaloriku", "Bagaimana asupan proteinku?", "Sudah cukup minum?"];
+type Message = { id: string; role: "user" | "assistant"; content: string; createdAt: string };
+type Conversation = { id: string; title: string };
+type Status = { ready: boolean; provider: string; model: string };
+const suggestions = ["Ide makan malam yang praktis?", "Bagaimana asupan proteinku?", "Menu hemat dengan tahu dan tempe?"];
 
 export function NutritionChat() {
-  const { foodLogs, exerciseLogs, targets, waterMl, chatMessages, setChatMessages, mode } = useDashboardState();
+  const { mode } = useDashboardState();
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [conversationId, setConversationId] = useState<string>();
+  const [status, setStatus] = useState<Status>();
   const [question, setQuestion] = useState("");
-  const [today, setToday] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [pendingQuestion, setPendingQuestion] = useState("");
+  const inFlight = useRef(false);
   const endRef = useRef<HTMLDivElement>(null);
-  useEffect(() => setToday(localDateString()), []);
-  useEffect(() => { if (chatMessages.length) endRef.current?.scrollIntoView({ block: "nearest" }); }, [chatMessages.length]);
-  const totals = sumNutrition(foodLogs.filter((log) => !log.date || log.date === today).flatMap((log) => log.items));
-  const remaining = targets.calories - totals.calories + exerciseLogs.reduce((sum, log) => sum + log.caloriesBurned, 0);
-  const menuIdeas = recipes.filter((recipe) => recipe.calories <= remaining).slice(0, 2);
-
-  function send(text: string) {
+  const requestRef = useRef<AbortController | null>(null);
+  const load = useCallback(async (id?: string, signal?: AbortSignal) => {
+    setLoading(true); setError("");
+    try {
+      const result = await api<{ conversations?: Conversation[]; messages?: Message[]; status: Status }>(`/api/chat${id ? `?conversationId=${encodeURIComponent(id)}` : ""}`, { signal });
+      if (signal?.aborted) return;
+      setStatus(result.status);
+      if (result.conversations) setConversations(result.conversations);
+      if (result.messages) { setMessages(result.messages); setConversationId(id); }
+    } catch (cause) { if (!signal?.aborted) setError(cause instanceof Error ? cause.message : "Percakapan belum dapat dimuat."); }
+    finally { if (!signal?.aborted) setLoading(false); }
+  }, []);
+  useEffect(() => { if (mode !== "account") return; const controller = new AbortController(); void load(undefined, controller.signal); return () => controller.abort(); }, [mode, load]);
+  useEffect(() => () => requestRef.current?.abort(), []);
+  useEffect(() => { if (messages.length || busy) endRef.current?.scrollIntoView({ block: "nearest", behavior: "instant" }); }, [messages.length, busy]);
+  async function send(text: string) {
     const trimmed = text.trim();
-    if (!trimmed || chatMessages.length >= 40) return;
-    const time = new Intl.DateTimeFormat("id-ID", { hour: "2-digit", minute: "2-digit" }).format(new Date());
-    const reply = demoNutritionReply(trimmed, { remainingCalories: remaining, proteinG: totals.proteinG, proteinTarget: targets.proteinG, waterMl, waterTarget: targets.waterMl });
-    setChatMessages((messages) => [...messages, { id: crypto.randomUUID(), role: "user", text: trimmed, time }, { id: crypto.randomUUID(), role: "assistant", text: reply, time }]);
-    setQuestion("");
+    if (!trimmed || inFlight.current || loading || messages.length >= 40 || mode !== "account") return;
+    inFlight.current = true; setBusy(true); setError(""); setPendingQuestion(trimmed);
+    const controller = new AbortController(); requestRef.current = controller;
+    try {
+      const result = await api<{ conversationId: string; messages: Message[] }>("/api/chat", { ...jsonRequest("POST", { message: trimmed, conversationId, timeZone: browserTimeZone() }), signal: controller.signal }, 120000);
+      setMessages(current => [...current, ...result.messages]); setConversationId(result.conversationId); setQuestion("");
+      if (!conversationId) setConversations(current => [{ id: result.conversationId, title: trimmed.slice(0, 80) }, ...current]);
+      setStatus(current => current ? { ...current, ready: true } : current);
+    } catch (cause) { if (!controller.signal.aborted) { setQuestion(trimmed); setError(cause instanceof Error ? cause.message : "Pesan belum berhasil dikirim."); } }
+    finally { inFlight.current = false; setBusy(false); setPendingQuestion(""); }
   }
-  function submit(event: FormEvent<HTMLFormElement>) { event.preventDefault(); send(question); }
-
-  return <div className="content-wrap logging-page chat-page">
-    <header className="page-heading"><h1>Asisten nutrisi</h1><p>Obrolkan menu dan kebiasaan makan dengan ringkasan harianmu.</p></header>
-    <p className="demo-note">Simulasi percakapan. Balasan memakai {mode === "account" ? "ringkasan akun" : "data demo"} dan aturan sederhana, belum terhubung ke AI. Percakapan hanya tersimpan selama sesi ini.</p>
-    <section className="chat-daily" aria-label="Konteks harian"><span>Sisa kalori <strong>{formatNumber(remaining)} kkal</strong></span><span>Protein <strong>{formatNumber(totals.proteinG)} / {formatNumber(targets.proteinG)} g</strong></span><span>Air minum <strong>{formatNumber(waterMl)} / {formatNumber(targets.waterMl)} ml</strong></span></section>
-    <section className="surface-panel chat-panel" aria-labelledby="chat-title">
-      <div className="section-title-row"><h2 id="chat-title">Percakapan hari ini</h2><button className="ui-btn ui-btn-ghost" disabled={!chatMessages.length} onClick={() => { setChatMessages([]); setQuestion(""); }}>Percakapan baru</button></div>
-      <div className="chat-log" role="log" aria-label="Riwayat percakapan" aria-live="polite">
-        <div className="ui-chat ui-chat-start"><div className="ui-chat-header">Asisten demo</div><div className="ui-chat-bubble">Halo! Mau mencari ide menu, melihat asupan protein, atau mengecek air minum? Pilih pertanyaan contoh atau tulis pertanyaanmu.</div></div>
-        {chatMessages.map((message) => <div className={`ui-chat ${message.role === "user" ? "ui-chat-end" : "ui-chat-start"}`} key={message.id}><div className="ui-chat-header">{message.role === "user" ? "Kamu" : "Asisten demo"} <time>{message.time}</time></div><div className={`ui-chat-bubble${message.role === "user" ? " ui-chat-bubble-primary" : ""}`}>{message.text}</div></div>)}<div ref={endRef} />
-      </div>
-      <div className="chat-suggestions" aria-label="Pertanyaan contoh">{suggestions.map((suggestion) => <button className="ui-btn" key={suggestion} onClick={() => send(suggestion)} disabled={chatMessages.length >= 40}>{suggestion}</button>)}</div>
-      <form className="chat-composer" onSubmit={submit}><label className="field-label" htmlFor="chat-question">Pesanmu<textarea className="ui-textarea w-full" id="chat-question" maxLength={500} rows={3} value={question} onChange={(e) => setQuestion(e.target.value)} placeholder="Apa yang ingin kamu tanyakan?" required disabled={chatMessages.length >= 40} aria-describedby="chat-help" /></label><div className="chat-compose-actions"><p id="chat-help">{chatMessages.length >= 40 ? "Batas 20 pertanyaan tercapai. Mulai percakapan baru." : `${question.length}/500 karakter · Enter untuk baris baru`}</p><button className="ui-btn ui-btn-primary" type="submit" disabled={!question.trim() || chatMessages.length >= 40}>Kirim pesan</button></div></form>
-    </section>
-    <section className="mt-6" aria-labelledby="menu-ideas-title"><div className="section-title-row"><h2 id="menu-ideas-title">Ide menu contoh</h2><Link className="ui-btn ui-btn-ghost" href="/recipes">Semua resep</Link></div><p className="photo-description mb-4">Pilihan berdasarkan sisa kalori pada ringkasan harian, belum mempertimbangkan alergi atau kebutuhan khusus.</p>{menuIdeas.length ? <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">{menuIdeas.map((recipe) => <li key={recipe.id}><RecipeCard recipe={recipe} /></li>)}</ul> : <p className="surface-panel">Tidak ada resep contoh yang muat dalam sisa kalori saat ini. Lihat koleksi resep untuk meninjau porsinya.</p>}</section>
-    <p className="chat-footnote">Saran bersifat umum. Kebutuhan gizi khusus sebaiknya dibahas dengan tenaga kesehatan. <Link href="/log/search">Buka katalog makanan</Link></p>
+  function submit(event: FormEvent<HTMLFormElement>) { event.preventDefault(); void send(question); }
+  return <div className="content-wrap chat-page">
+    <header className="page-heading"><h1>Bertanya ke Luna</h1><p>Teman diskusi untuk makanan dan kebiasaan kecilmu.</p></header>
+    {mode === "demo" ? <div className="ui-alert"><span>Masuk untuk berbicara dengan AI dan menyimpan percakapanmu.</span><Link href="/login" className="ui-btn">Masuk akun <Icon name="arrow" size={16} /></Link></div> : <p className="luna-status"><span className={status?.ready ? "status-dot ready" : "status-dot"} />{loading ? "Memeriksa koneksi Luna…" : status?.ready ? "Luna siap menemanimu · AI terhubung" : "Mesin AI belum siap · jalankan model di server"}<button className="text-button" disabled={busy || loading} onClick={() => void load()}>Periksa ulang</button></p>}
+    <div className="luna-layout">
+      <aside className="conversation-list" aria-label="Percakapan tersimpan">
+        <h2>Obrolanmu</h2><button className="ui-btn w-full" disabled={busy || loading} onClick={() => { setMessages([]); setConversationId(undefined); setQuestion(""); setError(""); }}>+ Percakapan baru</button>
+        {conversations.length ? conversations.map(item => <button key={item.id} className="conversation-item" aria-pressed={item.id === conversationId} disabled={busy || loading} onClick={() => void load(item.id)}>{item.title}</button>) : <p className="field-help">Percakapan yang tersimpan akan muncul di sini.</p>}
+      </aside>
+      <section className="surface-panel luna-panel" aria-label="Chatbot makanan">
+        <div className="luna-heading"><span className="luna-mark" aria-hidden="true">✧</span><div><h2>Luna</h2><p>Pendamping makananmu</p></div><Link href="/log" className="text-button">Catat makanan <Icon name="arrow" size={16} /></Link></div>
+        <div className="chat-log" role="log" aria-label="Riwayat percakapan" aria-live="polite" aria-busy={loading || busy}>
+          {!messages.length && !busy && <div className="chat-welcome"><span className="moon-orbit" aria-hidden="true">☾</span><h3>Mau makan apa hari ini?</h3><p>Ceritakan bahan yang kamu punya, menu yang kamu suka, atau tanyakan asupan harianmu.</p></div>}
+          {messages.map(message => <div className={`ui-chat ${message.role === "user" ? "ui-chat-end" : "ui-chat-start"}`} key={message.id}><div className="ui-chat-header">{message.role === "user" ? "Kamu" : "Luna"}<time>{new Intl.DateTimeFormat("id-ID", { hour: "2-digit", minute: "2-digit" }).format(new Date(message.createdAt))}</time></div><div className="ui-chat-bubble">{message.content}</div></div>)}
+          {busy && <><div className="ui-chat ui-chat-end"><div className="ui-chat-header">Kamu</div><div className="ui-chat-bubble">{pendingQuestion}</div></div><p className="luna-thinking" role="status">Luna sedang menyusun saran…</p></>}<div ref={endRef} />
+        </div>
+        {!messages.length && <div className="chat-suggestions" aria-label="Pertanyaan contoh">{suggestions.map(suggestion => <button className="ui-btn" key={suggestion} onClick={() => setQuestion(suggestion)} disabled={busy}>{suggestion}<Icon name="arrow" size={14} /></button>)}</div>}
+        {error && <p className="chat-error" role="alert">{error} Pesanmu tetap ada di bawah.</p>}
+        <form className="chat-composer" onSubmit={submit}><label className="field-label" htmlFor="chat-question">Pesan untuk Luna<textarea className="ui-textarea w-full" id="chat-question" maxLength={500} rows={2} value={question} onChange={event => setQuestion(event.target.value)} placeholder="Misalnya, aku punya telur dan bayam…" required disabled={busy || loading || mode === "demo" || messages.length >= 40} aria-describedby="chat-help" /></label><div className="chat-compose-actions"><p id="chat-help">{messages.length >= 40 ? "20 pertanyaan tercapai. Mulai obrolan baru." : `${question.length}/500 karakter`}</p><button className="ui-btn ui-btn-primary" disabled={!question.trim() || busy || loading || mode === "demo" || messages.length >= 40}>{busy ? "Menunggu Luna…" : "Kirim pesan"}<Icon name="arrow" size={16} /></button></div></form>
+      </section>
+    </div><p className="chat-footnote">Luna memakai catatan harian yang tersimpan di akun. Saran dan estimasi gizi perlu ditinjau; kebutuhan medis dibahas dengan tenaga kesehatan.</p>
   </div>;
 }

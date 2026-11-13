@@ -3,14 +3,17 @@ import { InputError, readJson } from "@/lib/http/json";
 import { AnalysisError } from "@/lib/ai/food-analysis";
 import { allowAnalysis } from "@/lib/ai/rate-limit";
 import { listConversations, readConversation, sendNutritionMessage } from "@/lib/chat/service";
+import { chatStatus } from "@/lib/chat/provider";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+export const maxDuration = 120;
 export async function GET(request: Request) {
   const identity = await requireUser(request); if (identity instanceof Response) return identity;
   try {
     const id = new URL(request.url).searchParams.get("conversationId");
     if (id && id.length > 128) throw new InputError("invalid_conversation_id");
-    return Response.json(id ? await readConversation(identity.userId, id) : { conversations: await listConversations(identity.userId) }, { headers: { "Cache-Control": "no-store" } });
+    const [content, status] = await Promise.all([id ? readConversation(identity.userId, id) : listConversations(identity.userId).then(conversations => ({ conversations })), chatStatus()]);
+    return Response.json({ ...content, status }, { headers: { "Cache-Control": "no-store" } });
   } catch (error) { return failure(error); }
 }
 export async function POST(request: Request) {
