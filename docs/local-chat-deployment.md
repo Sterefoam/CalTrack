@@ -4,7 +4,7 @@ Luna memakai Ollama dan Qwen3 4B di server sendiri. Browser hanya mengakses `/ap
 
 ## Di komputer sendiri
 
-Pasang Ollama dari https://ollama.com/download lalu jalankan `ollama pull qwen3:4b`. Jalankan Ollama, kemudian aplikasi seperti biasa. Pengaturan bawaan: `CHAT_PROVIDER=ollama`, `OLLAMA_BASE_URL=http://127.0.0.1:11434`, `OLLAMA_MODEL=qwen3:4b`. Masuk ke akun dan buka Asisten. Model berjalan lokal tanpa API key. Respons pertama dapat lebih lama saat model dimuat.
+Pasang Ollama dari https://ollama.com/download lalu jalankan `ollama pull qwen3:4b-instruct`. Jalankan Ollama, kemudian aplikasi seperti biasa. Pengaturan bawaan: `CHAT_PROVIDER=ollama`, `OLLAMA_BASE_URL=http://127.0.0.1:11434`, `OLLAMA_MODEL=qwen3:4b-instruct`. Masuk ke akun dan buka Asisten. Model berjalan lokal tanpa API key. Respons pertama dapat lebih lama saat model dimuat.
 
 ## Deploy dengan Docker Compose
 
@@ -20,3 +20,4 @@ Volume `app-data` menyimpan akun, quest dan percakapan; `model-data` menyimpan b
 Hosting serverless saja (misalnya Vercel) tidak menjalankan Ollama di dalam fungsi. Jika frontend ditempatkan di sana, sediakan server Ollama terpisah yang dapat diakses backend melalui jaringan privat atau proxy terautentikasi, dan atur `OLLAMA_BASE_URL` di server. Jangan memakai `localhost` untuk menunjuk komputer pribadi dari deployment publik. Timeout platform harus setidaknya 120 detik. Paket hosting gratis belum tentu menyediakan RAM, durasi, dan penyimpanan yang cukup.
 
 Model ini untuk saran umum, bukan nasihat klinis atau angka gizi terverifikasi. Nilai gizi yang diberikan model tetap estimasi. Konfigurasi ini hanya mengganti chatbot; pembaca foto makanan memiliki konfigurasi terpisah.
+

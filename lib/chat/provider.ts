@@ -6,7 +6,7 @@ type ProviderOptions = { fetcher?: typeof fetch; apiKey?: string; model?: string
 function configuration(options: ProviderOptions) {
   const provider = options.provider ?? (options.apiKey ? "openai" : process.env.CHAT_PROVIDER ?? "ollama");
   if (provider !== "ollama" && provider !== "openai") throw new AnalysisError("ai_not_configured", 503);
-  return { provider, model: options.model ?? (provider === "ollama" ? process.env.OLLAMA_MODEL ?? "qwen3:4b" : process.env.OPENAI_MODEL ?? "gpt-4o"), baseUrl: (options.baseUrl ?? process.env.OLLAMA_BASE_URL ?? "http://127.0.0.1:11434").replace(/\/$/, "") };
+  return { provider, model: options.model ?? (provider === "ollama" ? process.env.OLLAMA_MODEL ?? "qwen3:4b-instruct" : process.env.OPENAI_MODEL ?? "gpt-4o"), baseUrl: (options.baseUrl ?? process.env.OLLAMA_BASE_URL ?? "http://127.0.0.1:11434").replace(/\/$/, "") };
 }
 
 export async function chatStatus(options: ProviderOptions = {}) {
@@ -41,3 +41,4 @@ export async function generateNutritionReply(messages: Message[], signal: AbortS
     throw new AnalysisError(combined.aborted ? "chat_timeout" : "chat_unavailable", combined.aborted ? 504 : 503);
   }
 }
+
