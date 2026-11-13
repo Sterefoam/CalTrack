@@ -321,6 +321,19 @@ export const recipeSteps = sqliteTable("recipe_steps", {
 ]);
 export type Recipe = typeof recipes.$inferSelect;
 
+export const questClaims = sqliteTable("quest_claims", {
+  id: text("id").primaryKey().$defaultFn(() => randomUUID()),
+  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  day: text("day").notNull(),
+  questId: text("quest_id").notNull(),
+  xp: integer("xp").notNull(),
+  createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull().$defaultFn(() => new Date())
+}, table => [uniqueIndex("quest_claims_user_day_quest").on(table.userId, table.day, table.questId), check("quest_xp_positive", sql`${table.xp} > 0`)]);
+export const adventureProfiles = sqliteTable("adventure_profiles", {
+  userId: text("user_id").primaryKey().references(() => users.id, { onDelete: "cascade" }),
+  equippedReward: text("equipped_reward").notNull().default("moon-scout")
+});
+
 export const recipeFavorites = sqliteTable("recipe_favorites", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
