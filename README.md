@@ -36,3 +36,13 @@ Eksperimen klasifikasi makanan melatih model dari gambar berlisensi web dan berj
 offline. Model belum dipasang pada analisis foto produksi. Metode, hasil, serta
 keterbatasan tersedia di [laporan awal](docs/food-recognition-ml.md) dan
 [pelatihan GPU serta perluasan jenis makanan v2](docs/food-recognition-ml-v2.md).
+
+Foto makanan sekarang dapat memakai diameter piring atau berat total makanan sebagai
+[ukuran pembanding](docs/photo-weight.md). Pembaca [tabel nutrisi berbagai bahasa](docs/nutrition-label.md)
+tersedia di `/log/label`; pengguna memeriksa angka, acuan, dan jumlah yang dimakan
+sebelum menyimpan. Layanan AI server perlu dikonfigurasi untuk analisis foto nyata.
+
+Model riset [perkiraan berat dalam gram](docs/food-weight-ml.md) dilatih terpisah
+dengan 3.262 foto Nutrition5k yang mempunyai berat timbangan. Model klasifikasi dan
+berat lokal tetap offline; hasil riset belum membuktikan akurasi pada foto ponsel,
+semua hidangan, atau semua bahasa label.
