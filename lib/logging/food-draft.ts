@@ -2,7 +2,7 @@ import type { FoodItem, MealType } from "@/lib/demo/nutrition-data";
 import type { PhotoWeightAssessment } from "@/lib/ai/photo-reference";
 
 export type InputMethod = "photo" | "voice" | "text" | "barcode" | "search";
-export type FoodDraft = { id: string; inputMethod: InputMethod; mealType: MealType; confidenceScore: number | null; items: FoodItem[]; notes: string; photoAssessment?: PhotoWeightAssessment; origin?: "favorite" | "manual" | "recipe" | "analysis" | "catalog" };
+export type FoodDraft = { id: string; inputMethod: InputMethod; mealType: MealType; confidenceScore: number | null; items: FoodItem[]; notes: string; photoAssessment?: PhotoWeightAssessment; origin?: "favorite" | "manual" | "recipe" | "analysis" | "catalog" | "nutrition-label" };
 
 export function createFoodDraft(inputMethod: InputMethod, items: FoodItem[], confidenceScore: number | null = null): FoodDraft {
   return { id: crypto.randomUUID(), inputMethod, mealType: "lunch", confidenceScore, items: structuredClone(items), notes: "" };

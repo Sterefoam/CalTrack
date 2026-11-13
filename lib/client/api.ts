@@ -12,6 +12,9 @@ const messages: Record<string, string> = {
   analysis_timeout: "Analisis terlalu lama. Coba lagi.",
   invalid_photo_reference: "Periksa ukuran pembanding yang dimasukkan.",
   reference_not_visible: "Batas piring belum terlihat jelas. Ambil ulang foto yang menampilkan seluruh piring.",
+  no_nutrition_label: "Tabel nutrisi belum ditemukan. Ambil foto lebih dekat dengan seluruh tabel terlihat.",
+  invalid_label_response: "Angka pada label belum dapat dibaca dengan aman. Coba foto yang lebih jelas atau isi manual.",
+  label_unavailable: "Pembaca label belum tersedia. Coba lagi atau isi gizi secara manual.",
 };
 export async function api<T>(path: string, options: RequestInit = {}): Promise<T> {
   let response: Response;

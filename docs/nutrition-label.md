@@ -1,0 +1,11 @@
+# Pembaca tabel nutrisi berbagai bahasa
+
+Halaman `/log/label` menerima foto JPG/PNG/WebP hingga 10 MB. Setelah pengguna menekan Baca label, `/api/analyze/label` memeriksa sesi akun, batas permintaan, format/ukuran unggahan, dan menormalkan foto hingga 2.400 piksel tanpa EXIF. Foto dikirim ke layanan vision yang dikonfigurasi melalui pengaturan AI aplikasi yang sudah ada. Mode demo hanya menampilkan data contoh lokal.
+
+Ekstraksi terstruktur mendeteksi bahasa, menyimpan nama baris dan angka asli, dan memilih satu kolom acuan (utamakan per 100 g/ml, lalu per porsi). Instruksi dan validasi mencegah pencampuran kolom, menganggap % nilai harian sebagai gram, atau menyamakan berat bersih dengan acuan gizi. Teks dalam foto diperlakukan sebagai data tidak tepercaya.
+
+`lib/nutrition/label.ts` menormalisasi angka Unicode, desimal koma/titik dan pemisah Arab. Angka seperti `1,234` yang ambigu, tanda kurang dari, nilai tidak terbaca, satuan tak dikenal, dan kolom yang bertentangan tetap memerlukan koreksi; nilai kosong tidak diubah menjadi nol. kJ dibagi 4,184 menjadi kkal; garam dibagi 2,5 menjadi natrium lalu dikonversi ke mg. Angka nol eksplisit dipertahankan. Dua representasi energi/natrium yang konsisten diperbolehkan dengan toleransi pembulatan.
+
+Pengguna mencocokkan angka dengan kemasan, mengisi nilai yang belum diketahui dari sumber tepercaya, memilih acuan, dan memasukkan jumlah yang dimakan. Gizi dihitung dengan rasio jumlah dikonsumsi terhadap acuan. Untuk ml atau jumlah porsi, berat yang dimakan dalam gram wajib dimasukkan terpisah: tidak ada asumsi kepadatan otomatis. Perubahan angka membatalkan centang konfirmasi. Hasil masuk ke tinjauan makanan biasa; belum disimpan ke riwayat sampai pengguna menyimpan.
+
+Pemeriksaan otomatis meliputi angka Jepang fullwidth, Arab, Persia, Devanagari, Bengali, desimal, konflik, konversi, nilai kosong/nol, kontrak gambar resolusi tinggi, serta skala gram/ml/porsi. Pemeriksaan tersebut menguji parser, kontrak layanan tiruan, dan perhitungan. **Belum merupakan benchmark akurasi OCR foto nyata atau bukti dukungan semua bahasa.** Layanan vision perlu dikonfigurasi, dan bahasa/aksara, kualitas cetak, pantulan, serta tata letak baru masih dapat menimbulkan kesalahan. Tidak ada klaim universal untuk seluruh makanan atau bahasa.
