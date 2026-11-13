@@ -1,0 +1,121 @@
+{
+  "createdAt": "2026-11-13T08:01:58.843580+00:00",
+  "dataset": "Nutrition5k overhead RGB, weighed total edible dish mass",
+  "license": {
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/",
+    "author": "Quin Thames et al., Nutrition5k (CVPR 2021)",
+    "source": "https://github.com/google-research-datasets/Nutrition5k#license--contact"
+  },
+  "counts": {
+    "train": 2224,
+    "validation": 386,
+    "calibration": 145,
+    "test": 507
+  },
+  "excluded": 0,
+  "selection": {
+    "fingerprint": "382b527fc7279aa3e415b9d8194c296a58c825ef26ada4f48d1c3daf9c23bb75",
+    "candidates": [
+      {
+        "kind": "training-median",
+        "checkpoint": null,
+        "medianGrams": 183.5,
+        "validation": {
+          "samples": 386,
+          "maeGrams": 125.51813471502591,
+          "medianAbsoluteErrorGrams": 102,
+          "rmseGrams": 165.67882422907118,
+          "mape": 1.1879178952189573,
+          "within20Percent": 0.17098445595854922,
+          "within50Grams": 0.25129533678756477
+        }
+      },
+      {
+        "kind": "frozen-ridge-log-mass",
+        "checkpoint": "ridge-best.pt",
+        "validation": {
+          "samples": 386,
+          "maeGrams": 54.96229263661439,
+          "medianAbsoluteErrorGrams": 35.683998107910156,
+          "rmseGrams": 82.76709292548482,
+          "mape": 0.30962196478735565,
+          "within20Percent": 0.4792746113989637,
+          "within50Grams": 0.6321243523316062
+        }
+      },
+      {
+        "kind": "finetuned-log-mass",
+        "checkpoint": "finetuned-best.pt",
+        "validation": {
+          "samples": 386,
+          "maeGrams": 47.38568025055327,
+          "medianAbsoluteErrorGrams": 31.93470001220703,
+          "rmseGrams": 69.79687840771354,
+          "mape": 0.2817301147600197,
+          "within20Percent": 0.5621761658031088,
+          "within50Grams": 0.6606217616580311
+        }
+      }
+    ],
+    "selected": {
+      "kind": "finetuned-log-mass",
+      "checkpoint": "finetuned-best.pt",
+      "validation": {
+        "samples": 386,
+        "maeGrams": 47.38568025055327,
+        "medianAbsoluteErrorGrams": 31.93470001220703,
+        "rmseGrams": 69.79687840771354,
+        "mape": 0.2817301147600197,
+        "within20Percent": 0.5621761658031088,
+        "within50Grams": 0.6606217616580311
+      }
+    },
+    "seed": 20261113,
+    "testAccessed": false,
+    "interval": {
+      "method": "split-conformal absolute gram residuals on separate capture-day calibration",
+      "targetCoverage": 0.9,
+      "radiusGrams": 78.872802734375,
+      "samples": 145
+    },
+    "torch": "2.11.0+cu128",
+    "gpu": "NVIDIA GeForce RTX 3050 6GB Laptop GPU",
+    "protocol": "nutrition5k-overhead-rgb-mass-v1",
+    "selectionMetric": "validation mean absolute error in grams"
+  },
+  "test": {
+    "samples": 507,
+    "maeGrams": 37.923771995529385,
+    "medianAbsoluteErrorGrams": 25.612018585205078,
+    "rmseGrams": 56.35577293769419,
+    "mape": 0.3904488546848712,
+    "within20Percent": 0.5621301775147929,
+    "within50Grams": 0.7495069033530573
+  },
+  "trainingMedianTest": {
+    "samples": 507,
+    "maeGrams": 115.86489151873768,
+    "medianAbsoluteErrorGrams": 98.5,
+    "rmseGrams": 152.24455276348593,
+    "mape": 1.8249540162254,
+    "within20Percent": 0.1755424063116371,
+    "within50Grams": 0.2485207100591716
+  },
+  "intervalTest": {
+    "targetCoverage": 0.9,
+    "empiricalCoverage": 0.8658777120315582,
+    "meanWidthGrams": 151.5403289794922
+  },
+  "experimental": true,
+  "productionEnabled": false,
+  "limitations": [
+    "Fixed capture rig and cafeteria domain; mobile plate scale and Indonesian cuisines not validated",
+    "No depth, hidden ingredients, or manual relabeling",
+    "Capture-day grouping supplements official plate split; adjacent test scans can remain correlated",
+    "Grams regression, not food classification accuracy; no promise of exact weight from a single photo",
+    "Capture-day validation/calibration differ from original paper protocol; not directly comparable to published full-video/depth results",
+    "Conformal coverage depends on exchangeability; mobile camera/plate scale, cuisine and session shifts can invalidate intervals",
+    "No ground-truth comparison against the reference-assisted application vision provider"
+  ]
+}
