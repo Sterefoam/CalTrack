@@ -29,8 +29,8 @@ export function MealHistory({ sessions, onAdd, onViewAll, onMealClick }: MealHis
 
   return (
     <article className="panel-card meal-card">
-      <div className="section-title-row meal-heading"><div><div className="card-kicker">Yang sudah kamu catat</div><h2>Riwayat makan <span className="today-chip">Hari ini</span></h2></div><button className="text-button" onClick={onViewAll}>Lihat semua <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></button></div>
-      <div className="meal-summary"><span><strong>{mealCount}</strong> makanan</span><span className="summary-separator"/><span><strong>{formatCalories(calorieCount)}</strong> kkal total</span></div>
+      <div className="section-title-row meal-heading"><div><h2>Catatan terbaru</h2></div><button className="text-button" onClick={onViewAll}>Lihat semua <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></button></div>
+      <div className="meal-summary"><span><strong>{mealCount}</strong> makanan</span><span className="summary-separator"/><span><strong>{formatCalories(calorieCount)}</strong> kkal ditampilkan</span></div>
       <div className="meal-list">
         {sessions.map((session) => <section className="meal-session" key={session.id} aria-label={`${session.label}, ${session.time}`}>
           <div className="meal-session-heading"><strong>{session.label}</strong><time>{session.time}</time></div>

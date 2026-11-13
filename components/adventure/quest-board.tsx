@@ -12,7 +12,7 @@ export function QuestBoard({ compact = false }: { compact?: boolean }) {
     <p className="quest-caption">Langkah kecil tetap berarti. Reset pukul 00.00 WIB.</p>
     {!adventure && !error && <p role="status">Memuat perjalananmu…</p>}
     <ul className="quest-list">{adventure?.quests.map(quest => <li key={quest.id} className={quest.claimed ? "quest-row claimed" : "quest-row"}>
-      <span className="quest-check" aria-hidden="true">{quest.claimed ? "✓" : <Icon name="sparkle" size={16} />}</span>
+      <span className="quest-check" aria-hidden="true">{quest.claimed ? <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m5 12 4 4L19 6" /></svg> : <Icon name="sparkle" size={16} />}</span>
       <div className="quest-copy"><div className="quest-title"><h3>{quest.title}</h3><span>+{quest.xp} XP</span></div>{!compact && <p>{quest.description}</p>}<div className="quest-progress"><progress className="ui-progress" value={quest.progress} max={quest.target} aria-label={quest.title} /><span>{quest.progress}/{quest.target} {quest.unit}</span></div></div>
       {quest.claimed ? <span className="quest-done">Diambil</span> : quest.ready ? <button className="ui-btn ui-btn-sm" disabled={busy} onClick={() => void act("claim", quest.id)}>Ambil XP</button> : <Link href={quest.href} className="quest-go" aria-label={`Kerjakan ${quest.title}`}><Icon name="arrow" size={18} /></Link>}
     </li>)}</ul>

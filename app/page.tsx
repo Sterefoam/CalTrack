@@ -15,6 +15,8 @@ import { useDashboardState } from "@/components/dashboard/dashboard-state";
 import { mealLabels, sumNutrition, formatNumber } from "@/lib/demo/nutrition-data";
 import { Dialog } from "@/components/layout/dialog";
 import { localDateString } from "@/lib/demo/local-date";
+import { JourneyHome } from "@/components/adventure/journey-home";
+import { QuestBoard } from "@/components/adventure/quest-board";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -47,11 +49,13 @@ export default function DashboardPage() {
           <div className="welcome-row">
             <div>
               
-              <h1>Hari ini, {profile.name.split(" ")[0]}</h1>
+              <h1>Markas harian</h1>
               <p className="welcome-subtitle">{today} &middot; {mode === "account" ? "Catatan akun" : "Data contoh"}</p>
             </div>
             <Link className="ui-btn ui-btn-primary" href="/log" aria-label="Catat makanan"><Icon name="plus" size={19} /> Catat makanan</Link>
           </div>
+
+          <JourneyHome />
 
           <section className="hero-grid" aria-label="Ringkasan kalori dan target">
             <CalorieCard targetCalories={targets.calories} consumedCalories={totals.calories} exerciseCalories={totalExerciseCalories} onInfo={() => notify("Sisa kalori = target − makanan + olahraga")} />
@@ -59,10 +63,12 @@ export default function DashboardPage() {
             <MacroChart proteinGrams={totals.proteinG} proteinTarget={targets.proteinG} carbsGrams={totals.carbsG} carbsTarget={targets.carbsG} fatGrams={totals.fatG} fatTarget={targets.fatG} onDetails={() => setDetail("nutrisi")} />
           </section>
 
-          <section className="lower-grid">
-            <MealHistory sessions={mealSessions} onAdd={() => router.push("/log")} onViewAll={() => router.push("/history")} onMealClick={setDetail} />
+          <section className="lower-grid" aria-label="Jurnal dan quest harian">
+            <MealHistory sessions={[...mealSessions].sort((a, b) => b.time.localeCompare(a.time)).slice(0, 2)} onAdd={() => router.push("/log")} onViewAll={() => router.push("/history")} onMealClick={setDetail} />
+            <QuestBoard compact />
+          </section>
 
-            <div className="side-widgets">
+            <section className="side-widgets" aria-label="Air minum dan aktivitas">
               <p className="field-help">Perubahan air minum dan olahraga berlaku selama sesi ini. {mode === "account" ? "Muat ulang untuk mengambil kembali catatan akun yang tersimpan." : "Muat ulang akan mengembalikan data contoh."}</p>
               <WaterTracker amountMl={waterMl} targetMl={targets.waterMl} onAdd={(amount) => setWaterMl((value) => Math.min(value + amount, 20000))} onRemove={(amount) => setWaterMl((value) => Math.max(0, value - amount))} onReset={() => setWaterMl(0)} />
               <article className="exercise-card">
@@ -70,8 +76,7 @@ export default function DashboardPage() {
                 <div className="exercise-content"><div className="card-kicker">Aktivitas hari ini</div><strong>{exerciseLogs.length === 1 ? exerciseLogs[0].activity : `${exerciseLogs.length} aktivitas`}</strong><span><b>{totalExerciseCalories}</b> kkal terbakar <i>·</i> {totalExerciseMinutes} menit</span></div>
                 <button className="exercise-add" aria-label="Tambah olahraga" onClick={() => setShowExerciseModal(true)}><Icon name="plus" size={18}/></button>
               </article>
-            </div>
-          </section>
+            </section>
 
 
         </div>

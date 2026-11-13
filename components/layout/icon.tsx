@@ -1,8 +1,9 @@
-export type IconName = "grid" | "book" | "sparkle" | "chart" | "settings" | "bell" | "plus" | "arrow" | "water" | "fire" | "clock" | "chevron" | "close";
+export type IconName = "grid" | "book" | "sparkle" | "chart" | "settings" | "bell" | "plus" | "arrow" | "water" | "fire" | "clock" | "chevron" | "close" | "moon";
 
 export function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
   const common = { width: size, height: size, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 1.8, strokeLinecap: "round" as const, strokeLinejoin: "round" as const, "aria-hidden": true as const };
   const paths: Record<IconName, React.ReactNode> = {
+    moon: <><path d="M20.2 15.4A8.7 8.7 0 0 1 8.6 3.8a9 9 0 1 0 11.6 11.6Z" /><path d="M17 3v4m-2-2h4" /></>,
     grid: <><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></>,
     book: <><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M4 5.5v16M8 7h8M8 11h7"/></>,
     sparkle: <><path d="m12 3 1.9 5.8L20 11l-6.1 2.2L12 19l-2-5.8L4 11l6-2.2z"/><path d="m19 15 .8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></>,

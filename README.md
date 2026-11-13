@@ -27,10 +27,18 @@ persisten, bukan filesystem sementara.
 ## Status fitur
 
 Profil, target, catatan makanan, dan riwayat akun terhubung ke server. Sebagian UI
-(favorit, resep contoh, chat, perubahan air/olahraga, dan pengingat) masih memakai
+(favorit, resep contoh, perubahan air/olahraga, dan pengingat) masih memakai
 state sesi. Kamera barcode belum membaca kode otomatis dalam mode akun.
 Lihat [batas integrasi](docs/frontend-integration.md), [API backend](docs/backend.md),
 [resep](docs/recipes.md), dan [pemulihan kata sandi](docs/password-recovery.md).
+
+Luna AI memakai Ollama dengan Qwen3 4B Instruct dan menyimpan percakapan per akun.
+Tidak memerlukan API key berbayar; deployment membutuhkan server yang mampu
+menjalankan model. Lihat [panduan AI lokal dan deployment](docs/local-chat-deployment.md).
+Quest harian memperoleh progres dari catatan makanan, memberi XP satu kali per quest
+per hari WIB, dan membuka hadiah kosmetik yang tersimpan di akun. Jalankan migrasi
+sebelum memakai fitur quest pada database lama. Tampilan petualangan malam memiliki
+navigasi desktop dan ponsel; [arah desain](docs/design-direction.md) mencatat keputusan visual.
 
 Eksperimen klasifikasi makanan melatih model dari gambar berlisensi web dan berjalan
 offline. Model belum dipasang pada analisis foto produksi. Metode, hasil, serta

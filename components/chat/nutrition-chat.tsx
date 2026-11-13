@@ -61,9 +61,9 @@ export function NutritionChat() {
         {conversations.length ? conversations.map(item => <button key={item.id} className="conversation-item" aria-pressed={item.id === conversationId} disabled={busy || loading} onClick={() => void load(item.id)}>{item.title}</button>) : <p className="field-help">Percakapan yang tersimpan akan muncul di sini.</p>}
       </aside>
       <section className="surface-panel luna-panel" aria-label="Chatbot makanan">
-        <div className="luna-heading"><span className="luna-mark" aria-hidden="true">✧</span><div><h2>Luna</h2><p>Pendamping makananmu</p></div><Link href="/log" className="text-button">Catat makanan <Icon name="arrow" size={16} /></Link></div>
+        <div className="luna-heading"><span className="luna-mark" aria-hidden="true"><Icon name="sparkle" size={28} /></span><div><h2>Luna</h2><p>Pendamping makananmu</p></div><Link href="/log" className="text-button">Catat makanan <Icon name="arrow" size={16} /></Link></div>
         <div className="chat-log" role="log" aria-label="Riwayat percakapan" aria-live="polite" aria-busy={loading || busy}>
-          {!messages.length && !busy && <div className="chat-welcome"><span className="moon-orbit" aria-hidden="true">☾</span><h3>Mau makan apa hari ini?</h3><p>Ceritakan bahan yang kamu punya, menu yang kamu suka, atau tanyakan asupan harianmu.</p></div>}
+          {!messages.length && !busy && <div className="chat-welcome"><span className="moon-orbit" aria-hidden="true"><Icon name="moon" size={48} /></span><h3>Mau makan apa hari ini?</h3><p>Ceritakan bahan yang kamu punya, menu yang kamu suka, atau tanyakan asupan harianmu.</p></div>}
           {messages.map(message => <div className={`ui-chat ${message.role === "user" ? "ui-chat-end" : "ui-chat-start"}`} key={message.id}><div className="ui-chat-header">{message.role === "user" ? "Kamu" : "Luna"}<time>{new Intl.DateTimeFormat("id-ID", { hour: "2-digit", minute: "2-digit" }).format(new Date(message.createdAt))}</time></div><div className="ui-chat-bubble">{message.content}</div></div>)}
           {busy && <><div className="ui-chat ui-chat-end"><div className="ui-chat-header">Kamu</div><div className="ui-chat-bubble">{pendingQuestion}</div></div><p className="luna-thinking" role="status">Luna sedang menyusun saran…</p></>}<div ref={endRef} />
         </div>

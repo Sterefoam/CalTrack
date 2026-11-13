@@ -1,39 +1,6 @@
-type MacroChartProps = {
-  proteinGrams: number;
-  proteinTarget: number;
-  carbsGrams: number;
-  carbsTarget: number;
-  fatGrams: number;
-  fatTarget: number;
-  onDetails?: () => void;
-};
-
-export function MacroChart({ proteinGrams, proteinTarget, carbsGrams, carbsTarget, fatGrams, fatTarget, onDetails }: MacroChartProps) {
-  const proteinCalories = proteinGrams * 4;
-  const carbsCalories = carbsGrams * 4;
-  const fatCalories = fatGrams * 9;
-  const totalMacroCalories = proteinCalories + carbsCalories + fatCalories;
-  const proteinShare = totalMacroCalories ? Math.round((proteinCalories / totalMacroCalories) * 100) : 0;
-  const carbsShare = totalMacroCalories ? Math.round((carbsCalories / totalMacroCalories) * 100) : 0;
-  const fatShare = totalMacroCalories ? Math.max(0, 100 - proteinShare - carbsShare) : 0;
-  const averageGoal = proteinTarget > 0 && carbsTarget > 0 && fatTarget > 0 ? Math.round(((proteinGrams / proteinTarget) + (carbsGrams / carbsTarget) + (fatGrams / fatTarget)) / 3 * 100) : 0;
-  const macros = [
-    { name: "Protein", grams: proteinGrams, target: proteinTarget, share: proteinShare, color: "protein", fill: "protein-fill" },
-    { name: "Karbo", grams: carbsGrams, target: carbsTarget, share: carbsShare, color: "carbs", fill: "carbs-fill" },
-    { name: "Lemak", grams: fatGrams, target: fatTarget, share: fatShare, color: "fat", fill: "fat-fill" }
-  ];
-  const proteinEnd = proteinShare;
-  const carbsEnd = proteinShare + carbsShare;
-
-  return (
-    <article className="macro-card panel-card">
-      <div className="section-title-row"><div><div className="card-kicker">Asupan harian</div><h2>Makronutrisi</h2></div><button className="text-button" onClick={onDetails}>Detail <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></button></div>
-      <div className="macro-chart-wrap">
-        <div className="macro-donut" role="img" aria-label={`Komposisi makro: protein ${proteinShare} persen, karbohidrat ${carbsShare} persen, lemak ${fatShare} persen`}><svg className="ring-chart" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="40" fill="none" stroke={totalMacroCalories ? "#e99c7e" : "var(--color-base-300)"} strokeWidth="12" /><circle cx="50" cy="50" r="40" fill="none" stroke="#d6b66e" strokeWidth="12" pathLength="100" strokeDasharray={`${carbsEnd} 100`} transform="rotate(-90 50 50)" /><circle cx="50" cy="50" r="40" fill="none" stroke="#689d76" strokeWidth="12" pathLength="100" strokeDasharray={`${proteinEnd} 100`} transform="rotate(-90 50 50)" /></svg><div className="donut-center"><strong>{averageGoal}<span>%</span></strong><small>rata-rata target</small></div></div>
-        <div className="macro-legend">
-          {macros.map((macro) => <div className="macro-line" key={macro.name}><span className={`legend-dot ${macro.color}`} /><div><strong>{macro.name}</strong><small>Target {macro.target} g</small></div><b>{macro.grams} <small>g</small></b></div>)}
-        </div>
-      </div>
-    </article>
-  );
+import { formatNumber } from "@/lib/demo/nutrition-data";
+type MacroChartProps = { proteinGrams: number; proteinTarget: number; carbsGrams: number; carbsTarget: number; fatGrams: number; fatTarget: number; onDetails?: () => void };
+export function MacroChart(props: MacroChartProps) {
+  const macros = [{ name: "Protein", value: props.proteinGrams, target: props.proteinTarget }, { name: "Karbohidrat", value: props.carbsGrams, target: props.carbsTarget }, { name: "Lemak", value: props.fatGrams, target: props.fatTarget }];
+  return <article className="macro-card panel-card"><div className="section-title-row"><h2>Asupan harian</h2><button className="text-button" onClick={props.onDetails}>Detail gizi ↗</button></div><div className="macro-bars">{macros.map(macro => <div className="macro-bar" key={macro.name}><div><span>{macro.name}</span><strong>{formatNumber(macro.value)} <small>/ {formatNumber(macro.target)} g</small></strong></div><progress className="ui-progress" value={Math.min(macro.value, macro.target)} max={macro.target || 1} aria-label={`${macro.name}: ${formatNumber(macro.value)} dari target ${formatNumber(macro.target)} gram`} /></div>)}</div></article>;
 }

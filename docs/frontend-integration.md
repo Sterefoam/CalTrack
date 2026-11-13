@@ -15,21 +15,42 @@ Analisis foto, teks dan suara dalam mode akun memakai `/api/analyze/*`. UI menje
 pengiriman ke AI dan mempertahankan input saat layanan gagal. Konfigurasi provider dibutuhkan
 untuk hasil nyata; analisis tidak otomatis menyimpan konsumsi. Mode demo memakai contoh.
 
+## Chat, quest, dan tampilan petualangan
+
+Tombol Bertanya ke AI membuka Luna pada `/chat`. Akun mengambil status model dan
+percakapan dari `/api/chat`; balasan berasal dari Ollama lokal dengan Qwen3 4B Instruct,
+bukan simulasi. Kegagalan layanan mempertahankan pesan dan tidak membuat balasan contoh.
+Ringkasan harian berasal dari akun; saran menu tidak mengubah makanan tercatat. Model
+diinstruksikan untuk mengarahkan angka gizi menu ke pencatatan atau label bersumber.
+Lihat [deployment AI lokal](./local-chat-deployment.md).
+
+`/quests` memakai `/api/adventure` untuk progres, klaim XP dan hadiah kosmetik.
+Klaim memvalidasi log server, dibatasi satu kali per akun/hari WIB/quest, dan memakai
+transaksi. XP serta hadiah tersimpan setelah muat ulang; demo hanya berlaku selama sesi.
+Markas, quest dan sidebar memakai satu AdventureProvider agar angka XP konsisten.
+
 ## Verifikasi
 
-Build produksi dan 36 tes service/migrasi/ML/helper klien lulus. Pemeriksaan browser pada
+Build produksi dan 62 tes service/migrasi/ML/helper klien lulus (satu tes OCR nyata
+memerlukan aktivasi terpisah). Pemeriksaan browser pada
 database sementara dengan AI berbayar dimatikan mencakup registrasi, onboarding, pencarian
 150 gram makanan (195 kkal), tinjauan, penyimpanan, muat ulang, dan riwayat. Profil/target
 serta log tetap ada setelah muat ulang tanpa makanan contoh. Kegagalan analisis teks tanpa
 provider menampilkan pesan dan mempertahankan input. Resep contoh 1,5 porsi (570 kkal)
 disimpan setelah pengguna melengkapi serat, gula dan natrium; total akun menjadi 765 kkal.
 
+Pemeriksaan tambahan memakai database sementara: akun baru 0 XP, penolakan klaim dini,
+klaim bersamaan yang idempoten, tiga quest 100 XP, pemakaian dan penyimpanan Jubah orbit,
+balasan model lokal nyata serta riwayat chat setelah muat ulang. Tiga belas rute mobile
+diperiksa tanpa luapan horizontal atau galat halaman. Hasil tidak membuktikan akurasi
+gizi atau seluruh kemungkinan jawaban model. Docker belum dijalankan pada mesin uji.
+
 ## Batas fitur
 
 - Air minum dan olahraga dibaca dari akun saat masuk, tetapi perubahan UI masih berlaku
   selama sesi dan diberi penjelasan di Dashboard.
 - Favorit makanan/resep masih selama sesi. Resep beserta nilai gizinya adalah contoh.
-- Chat masih simulasi dengan konteks akun/demo yang dijelaskan di UI.
+- Chat nyata memerlukan akun dan Ollama/model yang siap; mode demo meminta masuk.
 - Barcode akun menerima kode yang diketik; pembacaan otomatis kamera belum diintegrasikan.
 - Model ML lokal masih eksperimen dan belum terhubung ke analisis produksi. Hasil dan
   keterbatasannya ada di [food-recognition-ml.md](./food-recognition-ml.md).
