@@ -4,6 +4,7 @@ import { InputError } from "@/lib/http/json";
 import { AnalysisError } from "@/lib/ai/food-analysis";
 import { analyzePhoto } from "@/lib/ai/photo";
 import { allowAnalysis } from "@/lib/ai/rate-limit";
+import { parsePhotoReference } from "@/lib/ai/photo-reference";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export async function POST(request: Request) {
@@ -14,7 +15,9 @@ export async function POST(request: Request) {
     const form = await readMultipart(request);
     const photo = form.get("photo");
     if (!(photo instanceof File) || form.getAll("photo").length !== 1) throw new InputError("photo_required");
-    return Response.json(await analyzePhoto(photo, request.signal), { headers: { "Cache-Control": "no-store" } });
+    if (form.getAll("reference").length > 1) throw new InputError("invalid_photo_reference");
+    const reference = parsePhotoReference(form.get("reference"));
+    return Response.json(await analyzePhoto(photo, request.signal,{ reference }), { headers: { "Cache-Control": "no-store" } });
   } catch (error) {
     const known = error instanceof InputError || error instanceof AnalysisError;
     return Response.json({ error: known ? error.code : "analysis_unavailable" }, { status: known ? error.status : 500 });

@@ -1,5 +1,6 @@
 import { localDateString } from "@/lib/demo/local-date";
 import type { DemoFoodLog, FoodItem, MealType } from "@/lib/demo/nutrition-data";
+import type { PhotoWeightAssessment } from "@/lib/ai/photo-reference";
 
 const messages: Record<string, string> = {
   authentication_required: "Sesi akun berakhir. Masuk kembali sebelum menyimpan.",
@@ -9,6 +10,8 @@ const messages: Record<string, string> = {
   analysis_rate_limited: "Terlalu banyak analisis. Tunggu sebentar lalu coba lagi.",
   ai_rate_limited: "Layanan AI sedang membatasi permintaan. Coba lagi nanti.",
   analysis_timeout: "Analisis terlalu lama. Coba lagi.",
+  invalid_photo_reference: "Periksa ukuran pembanding yang dimasukkan.",
+  reference_not_visible: "Batas piring belum terlihat jelas. Ambil ulang foto yang menampilkan seluruh piring.",
 };
 export async function api<T>(path: string, options: RequestInit = {}): Promise<T> {
   let response: Response;
@@ -36,4 +39,4 @@ export async function loadFoodHistory(date: string, signal?: AbortSignal) {
   } while (cursor);
   return logs;
 }
-export type AnalysisResponse = { items: FoodItem[]; confidenceScore: number | null; transcript?: string };
+export type AnalysisResponse = { items: FoodItem[]; confidenceScore: number | null; transcript?: string; photoAssessment?: PhotoWeightAssessment };
