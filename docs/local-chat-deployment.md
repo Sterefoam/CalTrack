@@ -19,5 +19,5 @@ Volume `app-data` menyimpan akun, quest dan percakapan; `model-data` menyimpan b
 
 Hosting serverless saja (misalnya Vercel) tidak menjalankan Ollama di dalam fungsi. Jika frontend ditempatkan di sana, sediakan server Ollama terpisah yang dapat diakses backend melalui jaringan privat atau proxy terautentikasi, dan atur `OLLAMA_BASE_URL` di server. Jangan memakai `localhost` untuk menunjuk komputer pribadi dari deployment publik. Timeout platform harus setidaknya 120 detik. Paket hosting gratis belum tentu menyediakan RAM, durasi, dan penyimpanan yang cukup.
 
-Model ini untuk saran umum, bukan nasihat klinis atau angka gizi terverifikasi. Nilai gizi yang diberikan model tetap estimasi. Konfigurasi ini hanya mengganti chatbot; pembaca foto makanan memiliki konfigurasi terpisah.
+Model ini untuk saran umum, bukan nasihat klinis. Prompt melarang model mengarang angka gizi menu dan mengarahkannya ke pencatatan atau label; angka ringkasan harian berasal dari database akun. Instruksi model tidak menjamin jawaban selalu benar, sehingga saran tetap perlu ditinjau. Konfigurasi ini hanya mengganti chatbot; pembaca foto makanan memiliki konfigurasi terpisah.
 
