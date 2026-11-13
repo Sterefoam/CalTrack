@@ -7,6 +7,7 @@ import { api } from "@/lib/client/api";
 import { createFoodDraft, nutritionFields } from "@/lib/logging/food-draft";
 import type { NutritionLabelResult } from "@/lib/nutrition/label";
 import { labelPortionToFood, type LabelPortionInput } from "@/lib/nutrition/label-portion";
+import { labelLanguages, type LabelLanguage } from "@/lib/nutrition/label-languages";
 
 const sample: NutritionLabelResult = {
   productName: "Produk contoh", languages: ["Indonesia", "English"],
@@ -24,6 +25,7 @@ export function NutritionLabelCapture() {
   const [result, setResult] = useState<NutritionLabelResult | null>(null);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [language, setLanguage] = useState<"auto" | LabelLanguage>("auto");
   const run = useRef<AbortController | null>(null);
   const camera = useRef<HTMLInputElement>(null);
   useEffect(() => () => run.current?.abort(), []);
@@ -44,7 +46,7 @@ export function NutritionLabelCapture() {
     run.current?.abort(); const controller = new AbortController(); run.current = controller;
     setBusy(true); setError(""); setResult(null);
     try {
-      const body = new FormData(); body.set("photo", file);
+      const body = new FormData(); body.set("photo", file); body.set("language", language);
       const response = await api<NutritionLabelResult>("/api/analyze/label", { method: "POST", body, signal: controller.signal });
       if (!controller.signal.aborted) setResult(response);
     } catch (cause) { if (!controller.signal.aborted) setError(cause instanceof Error ? cause.message : "Label belum terbaca. Coba lagi."); }
@@ -53,13 +55,14 @@ export function NutritionLabelCapture() {
   return <div className="space-y-6">
     <section className="surface-panel space-y-4" aria-label="Foto tabel nutrisi">
       <h2 className="text-lg font-semibold">Tampilkan tabel secara utuh</h2>
-      <p className="text-sm leading-relaxed text-base-content/70">Gunakan cahaya cukup, tanpa pantulan, dan dekatkan kamera agar angka terbaca. Bahasa dideteksi otomatis; hasil perlu diperiksa karena belum semua bahasa dan kondisi foto teruji.</p>
+      <p className="text-sm leading-relaxed text-base-content/70">Gunakan cahaya cukup, tanpa pantulan, dan dekatkan kamera agar angka terbaca. Pilih bahasa pada label atau deteksi otomatis dengan AI. Pembaca lokal masih percobaan; label Arab, Hindi, foto kecil, dan tabel melengkung dapat gagal terbaca. Cocokkan hasil dengan kemasan.</p>
       {mode === "demo" && <p className="demo-note">Mode demo memakai data contoh. Foto tidak dianalisis atau dikirim ke layanan AI.</p>}
+      {mode === "account" && <label className="field-label" htmlFor="label-language">Bahasa pada label<select id="label-language" className="ui-select w-full" value={language} onChange={event => { run.current?.abort(); setBusy(false); setResult(null); setError(""); setLanguage(event.target.value as typeof language); }}><option value="auto">Deteksi otomatis dengan AI</option>{Object.entries(labelLanguages).map(([key, name]) => <option key={key} value={key}>{name} — pembaca lokal</option>)}</select></label>}
       <label className="field-label" htmlFor="label-file">Pilih foto dari galeri<input id="label-file" className="ui-file-input w-full max-w-full" type="file" accept="image/jpeg,image/png,image/webp" onChange={event => { choose(event.target.files?.[0]); event.target.value = ""; }} /></label>
       <input ref={camera} type="file" accept="image/jpeg,image/png,image/webp" capture="environment" className="sr-only" tabIndex={-1} aria-label="Foto tabel dengan kamera" onChange={event => { choose(event.target.files?.[0]); event.target.value = ""; }} />
       <button className="ui-btn" type="button" onClick={() => camera.current?.click()}>Ambil foto tabel</button>
       {preview && <img src={preview} alt="Pratinjau tabel nutrisi yang dipilih" className="max-h-96 w-full rounded-box object-contain" onError={() => { run.current?.abort(); setBusy(false); setFile(null); setResult(null); setError("Foto tidak dapat dibuka. Pilih gambar lain."); }} />}
-      <p className="text-sm leading-relaxed text-base-content/70">JPG, PNG, atau WebP, maksimal 10 MB. {mode === "account" ? "Saat kamu menekan Baca label, foto dikirim ke server dan layanan AI." : "Contoh dapat dicoba tanpa foto."}</p>
+      <p className="text-sm leading-relaxed text-base-content/70">JPG, PNG, atau WebP, maksimal 10 MB. {mode === "account" ? language === "auto" ? "Saat kamu menekan Baca label, foto dikirim ke server dan layanan AI." : "Foto dibaca di server tanpa dikirim ke layanan AI. Pilih bahasa yang cocok dan tampilkan satu kolom gizi dengan jelas." : "Contoh dapat dicoba tanpa foto."}</p>
       <button className="ui-btn w-full" type="button" disabled={busy || (mode === "account" && !file)} onClick={scan}>{busy ? "Membaca label..." : mode === "demo" ? "Coba contoh label" : "Baca label"}</button>
       {busy && <button className="ui-btn ui-btn-ghost" type="button" onClick={() => { run.current?.abort(); setBusy(false); }}>Batalkan</button>}
       {error && <p className="ui-alert ui-alert-error" role="alert">{error}</p>}
@@ -89,7 +92,7 @@ function LabelEditor({ result }: { result: NutritionLabelResult }) {
   }
   return <section className="surface-panel space-y-5" aria-label="Periksa hasil label">
     <h2 className="text-lg font-semibold">Periksa hasil label</h2>
-    <p className="text-sm leading-relaxed">{mode === "demo" ? "Hasil contoh. " : ""}Bahasa terdeteksi: {result.languages.join(", ") || "belum diketahui"}. Kolom yang dibaca: {result.basis.description || "belum jelas"}.</p>
+    <p className="text-sm leading-relaxed">{mode === "demo" ? "Hasil contoh. " : ""}Bahasa label: {result.languages.join(", ") || "belum diketahui"}. Kolom yang dibaca: {result.basis.description || "belum jelas"}.</p>
     {result.warnings.length > 0 && <div className="ui-alert ui-alert-warning"><ul className="space-y-2 list-disc pl-4">{result.warnings.map((warning, index) => <li key={index}>{warning}</li>)}</ul></div>}
     <details><summary className="cursor-pointer font-semibold">Lihat angka asli yang terbaca</summary><ul className="mt-3 space-y-2 break-words">{result.facts.map((fact, index) => <li key={index}><bdi>{fact.label}</bdi>: <bdi>{fact.qualifier === "less_than" ? "< " : fact.qualifier === "approximate" ? "≈ " : ""}{fact.value ?? "tidak terbaca"} {fact.unit}</bdi></li>)}</ul></details>
     <form className="space-y-5" onSubmit={submit}>

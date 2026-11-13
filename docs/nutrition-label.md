@@ -1,6 +1,6 @@
 # Pembaca tabel nutrisi berbagai bahasa
 
-Halaman `/log/label` menerima foto JPG/PNG/WebP hingga 10 MB. Setelah pengguna menekan Baca label, `/api/analyze/label` memeriksa sesi akun, batas permintaan, format/ukuran unggahan, dan menormalkan foto hingga 2.400 piksel tanpa EXIF. Foto dikirim ke layanan vision yang dikonfigurasi melalui pengaturan AI aplikasi yang sudah ada. Mode demo hanya menampilkan data contoh lokal.
+Halaman `/log/label` menerima foto JPG/PNG/WebP hingga 10 MB. Setelah pengguna menekan Baca label, `/api/analyze/label` memeriksa sesi akun, batas permintaan, format/ukuran unggahan, dan menormalkan foto hingga 2.400 piksel tanpa EXIF. Pilihan Deteksi otomatis dengan AI mengirim foto ke layanan vision yang dikonfigurasi melalui pengaturan AI aplikasi. Pilihan bahasa eksplisit memakai pembaca teks lokal percobaan di server, tanpa mengirim foto ke layanan AI. Mode demo hanya menampilkan data contoh lokal. Lihat [hasil uji foto lokal](nutrition-label-ocr.md), termasuk bahasa dan foto kemasan yang belum berhasil.
 
 Ekstraksi terstruktur mendeteksi bahasa, menyimpan nama baris dan angka asli, dan memilih satu kolom acuan (utamakan per 100 g/ml, lalu per porsi). Instruksi dan validasi mencegah pencampuran kolom, menganggap % nilai harian sebagai gram, atau menyamakan berat bersih dengan acuan gizi. Teks dalam foto diperlakukan sebagai data tidak tepercaya.
 

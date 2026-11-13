@@ -15,6 +15,8 @@ const messages: Record<string, string> = {
   no_nutrition_label: "Tabel nutrisi belum ditemukan. Ambil foto lebih dekat dengan seluruh tabel terlihat.",
   invalid_label_response: "Angka pada label belum dapat dibaca dengan aman. Coba foto yang lebih jelas atau isi manual.",
   label_unavailable: "Pembaca label belum tersedia. Coba lagi atau isi gizi secara manual.",
+  invalid_label_language: "Pilih bahasa label dari pilihan yang tersedia.",
+  ocr_not_prepared: "Paket bahasa pembaca lokal belum disiapkan di server. Gunakan pembaca AI atau isi secara manual.",
 };
 export async function api<T>(path: string, options: RequestInit = {}): Promise<T> {
   let response: Response;

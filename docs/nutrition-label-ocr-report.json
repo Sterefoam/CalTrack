@@ -1,0 +1,1619 @@
+{
+  "createdAt": "2026-11-13T17:44:44.633Z",
+  "engine": "Tesseract.js 6.0.1 + pinned official tessdata_best",
+  "modelRevision": "e12c65a915945e4c28e237a9b52bc4a8f39a0cec",
+  "developmentAcceptanceTest": true,
+  "independentAccuracyBenchmark": false,
+  "providerVisionTested": false,
+  "baselineSyntheticCompleteReads": 14,
+  "baselineSyntheticSamples": 27,
+  "synthetic": {
+    "samples": 27,
+    "completeReads": 20,
+    "languages": {
+      "eng": {
+        "samples": 3,
+        "completeReads": 3
+      },
+      "ind": {
+        "samples": 3,
+        "completeReads": 3
+      },
+      "fra": {
+        "samples": 3,
+        "completeReads": 3
+      },
+      "spa": {
+        "samples": 3,
+        "completeReads": 3
+      },
+      "deu": {
+        "samples": 3,
+        "completeReads": 3
+      },
+      "jpn": {
+        "samples": 3,
+        "completeReads": 3
+      },
+      "ara": {
+        "samples": 3,
+        "completeReads": 0
+      },
+      "chi_sim": {
+        "samples": 3,
+        "completeReads": 2
+      },
+      "hin": {
+        "samples": 3,
+        "completeReads": 0
+      }
+    },
+    "records": [
+      {
+        "id": "eng-clear",
+        "language": "eng",
+        "variant": "clear",
+        "kind": "controlled-synthetic-label",
+        "passed": true,
+        "basisCorrect": true,
+        "fields": {
+          "calories": {
+            "expected": 240,
+            "actual": 240,
+            "correct": true
+          },
+          "proteinG": {
+            "expected": 5.5,
+            "actual": 5.5,
+            "correct": true
+          },
+          "carbsG": {
+            "expected": 30,
+            "actual": 30,
+            "correct": true
+          },
+          "fatG": {
+            "expected": 9,
+            "actual": 9,
+            "correct": true
+          },
+          "fiberG": {
+            "expected": 2,
+            "actual": 2,
+            "correct": true
+          },
+          "sugarG": {
+            "expected": 0,
+            "actual": 0,
+            "correct": true
+          },
+          "sodiumMg": {
+            "expected": 120,
+            "actual": 120,
+            "correct": true
+          }
+        },
+        "warnings": [
+          "Hasil pembaca teks lokal. Periksa kembali semua angka, satuan, dan kolom pada foto."
+        ],
+        "seconds": 2.848
+      },
+      {
+        "id": "eng-degraded",
+        "language": "eng",
+        "variant": "degraded",
+        "kind": "controlled-synthetic-label",
+        "passed": true,
+        "basisCorrect": true,
+        "fields": {
+          "calories": {
+            "expected": 240,
+            "actual": 240,
+            "correct": true
+          },
+          "proteinG": {
+            "expected": 5.5,
+            "actual": 5.5,
+            "correct": true
+          },
+          "carbsG": {
+            "expected": 30,
+            "actual": 30,
+            "correct": true
+          },
+          "fatG": {
+            "expected": 9,
+            "actual": 9,
+            "correct": true
+          },
+          "fiberG": {
+            "expected": 2,
+            "actual": 2,
+            "correct": true
+          },
+          "sugarG": {
+            "expected": 0,
+            "actual": 0,
+            "correct": true
+          },
+          "sodiumMg": {
+            "expected": 120,
+            "actual": 120,
+            "correct": true
+          }
+        },
+        "warnings": [
+          "Hasil pembaca teks lokal. Periksa kembali semua angka, satuan, dan kolom pada foto.",
+          "Baris protein belum terbaca sebagai satu jumlah yang pasti.",
+          "Nilai kosong berarti belum diketahui, bukan nol. Lengkapi dari label sebelum mencatat."
+        ],
+        "seconds": 2.781
+      },
+      {
+        "id": "eng-skewed",
+        "language": "eng",
+        "variant": "skewed",
+        "kind": "controlled-synthetic-label",
+        "passed": true,
+        "basisCorrect": true,
+        "fields": {
+          "calories": {
+            "expected": 240,
+            "actual": 240,
+            "correct": true
+          },
+          "proteinG": {
+            "expected": 5.5,
+            "actual": 5.5,
+            "correct": true
+          },
+          "carbsG": {
+            "expected": 30,
+            "actual": 30,
+            "correct": true
+          },
+          "fatG": {
+            "expected": 9,
+            "actual": 9,
+            "correct": true
+          },
+          "fiberG": {
+            "expected": 2,
+            "actual": 2,
+            "correct": true
+          },
+          "sugarG": {
+            "expected": 0,
+            "actual": 0,
+            "correct": true
+          },
+          "sodiumMg": {
+            "expected": 120,
+            "actual": 120,
+            "correct": true
+          }
+        },
+        "warnings": [
+          "Hasil pembaca teks lokal. Periksa kembali semua angka, satuan, dan kolom pada foto."
+        ],
+        "seconds": 3.079
+      },
+      {
+        "id": "ind-clear",
+        "language": "ind",
+        "variant": "clear",
+        "kind": "controlled-synthetic-label",
+        "passed": true,
+        "basisCorrect": true,
+        "fields": {
+          "calories": {
+            "expected": 240,
+            "actual": 240,
+            "correct": true
+          },
+          "proteinG": {
+            "expected": 5.5,
+            "actual": 5.5,
+            "correct": true
+          },
+          "carbsG": {
+            "expected": 30,
+            "actual": 30,
+            "correct": true
+          },
+          "fatG": {
+            "expected": 9,
+            "actual": 9,
+            "correct": true
+          },
+          "fiberG": {
+            "expected": 2,
+            "actual": 2,
+            "correct": true
+          },
+          "sugarG": {
+            "expected": 0,
+            "actual": 0,
+            "correct": true
+          },
+          "sodiumMg": {
+            "expected": 120,
+            "actual": 120,
+            "correct": true
+          }
+        },
+        "warnings": [
+          "Hasil pembaca teks lokal. Periksa kembali semua angka, satuan, dan kolom pada foto.",
+          "Baris sugar belum terbaca sebagai satu jumlah yang pasti.",
+          "Nilai kosong berarti belum diketahui, bukan nol. Lengkapi dari label sebelum mencatat."
+        ],
+        "seconds": 2.574
+      },
+      {
+        "id": "ind-degraded",
+        "language": "ind",
+        "variant": "degraded",
+        "kind": "controlled-synthetic-label",
+        "passed": true,
+        "basisCorrect": true,
+        "fields": {
+          "calories": {
+            "expected": 240,
+            "actual": 240,
+            "correct": true
+          },
+          "proteinG": {
+            "expected": 5.5,
+            "actual": 5.5,
+            "correct": true
+          },
+          "carbsG": {
+            "expected": 30,
+            "actual": 30,
+            "correct": true
+          },
+          "fatG": {
+            "expected": 9,
+            "actual": 9,
+            "correct": true
+          },
+          "fiberG": {
+            "expected": 2,
+            "actual": 2,
+            "correct": true
+          },
+          "sugarG": {
+            "expected": 0,
+            "actual": 0,
+            "correct": true
+          },
+          "sodiumMg": {
+            "expected": 120,
+            "actual": 120,
+            "correct": true
+          }
+        },
+        "warnings": [
+          "Hasil pembaca teks lokal. Periksa kembali semua angka, satuan, dan kolom pada foto."
+        ],
+        "seconds": 3.807
+      },
+      {
+        "id": "ind-skewed",
+        "language": "ind",
+        "variant": "skewed",
+        "kind": "controlled-synthetic-label",
+        "passed": true,
+        "basisCorrect": true,
+        "fields": {
+          "calories": {
+            "expected": 240,
+            "actual": 240,
+            "correct": true
+          },
+          "proteinG": {
+            "expected": 5.5,
+            "actual": 5.5,
+            "correct": true
+          },
+          "carbsG": {
+            "expected": 30,
+            "actual": 30,
+            "correct": true
+          },
+          "fatG": {
+            "expected": 9,
+            "actual": 9,
+            "correct": true
+          },
+          "fiberG": {
+            "expected": 2,
+            "actual": 2,
+            "correct": true
+          },
+          "sugarG": {
+            "expected": 0,
+            "actual": 0,
+            "correct": true
+          },
+          "sodiumMg": {
+            "expected": 120,
+            "actual": 120,
+            "correct": true
+          }
+        },
+        "warnings": [
+          "Hasil pembaca teks lokal. Periksa kembali semua angka, satuan, dan kolom pada foto."
+        ],
+        "seconds": 4.512
+      },
+      {
+        "id": "fra-clear",
+        "language": "fra",
+        "variant": "clear",
+        "kind": "controlled-synthetic-label",
+        "passed": true,
+        "basisCorrect": true,
+        "fields": {
+          "calories": {
+            "expected": 240,
+            "actual": 240,
+            "correct": true
+          },
+          "proteinG": {
+            "expected": 5.5,
+            "actual": 5.5,
+            "correct": true
+          },
+          "carbsG": {
+            "expected": 30,
+            "actual": 30,
+            "correct": true
+          },
+          "fatG": {
+            "expected": 9,
+            "actual": 9,
+            "correct": true
+          },
+          "fiberG": {
+            "expected": 2,
+            "actual": 2,
+            "correct": true
+          },
+          "sugarG": {
+            "expected": 0,
+            "actual": 0,
+            "correct": true
+          },
+          "sodiumMg": {
+            "expected": 120,
+            "actual": 120,
+            "correct": true
+          }
+        },
+        "warnings": [
+          "Hasil pembaca teks lokal. Periksa kembali semua angka, satuan, dan kolom pada foto."
+        ],
+        "seconds": 3.025
+      },
+      {
+        "id": "fra-degraded",
+        "language": "fra",
+        "variant": "degraded",
+        "kind": "controlled-synthetic-label",
+        "passed": true,
+        "basisCorrect": true,
+        "fields": {
+          "calories": {
+            "expected": 240,
+            "actual": 240,
+            "correct": true
+          },
+          "proteinG": {
+            "expected": 5.5,
+            "actual": 5.5,
+            "correct": true
+          },
+          "carbsG": {
+            "expected": 30,
+            "actual": 30,
+            "correct": true
+          },
+          "fatG": {
+            "expected": 9,
+            "actual": 9,
+            "correct": true
+          },
+          "fiberG": {
+            "expected": 2,
+            "actual": 2,
+            "correct": true
+          },
+          "sugarG": {
+            "expected": 0,
+            "actual": 0,
+            "correct": true
+          },
+          "sodiumMg": {
+            "expected": 120,
+            "actual": 120,
+            "correct": true
+          }
+        },
+        "warnings": [
+          "Hasil pembaca teks lokal. Periksa kembali semua angka, satuan, dan kolom pada foto."
+        ],
+        "seconds": 3.016
+      },
+      {
+        "id": "fra-skewed",
+        "language": "fra",
+        "variant": "skewed",
+        "kind": "controlled-synthetic-label",
+        "passed": true,
+        "basisCorrect": true,
+        "fields": {
+          "calories": {
+            "expected": 240,
+            "actual": 240,
+            "correct": true
+          },
+          "proteinG": {
+            "expected": 5.5,
+            "actual": 5.5,
+            "correct": true
+          },
+          "carbsG": {
+            "expected": 30,
+            "actual": 30,
+            "correct": true
+          },
+          "fatG": {
+            "expected": 9,
+            "actual": 9,
+            "correct": true
+          },
+          "fiberG": {
+            "expected": 2,
+            "actual": 2,
+            "correct": true
+          },
+          "sugarG": {
+            "expected": 0,
+            "actual": 0,
+            "correct": true
+          },
+          "sodiumMg": {
+            "expected": 120,
+            "actual": 120,
+            "correct": true
+          }
+        },
+        "warnings": [
+          "Hasil pembaca teks lokal. Periksa kembali semua angka, satuan, dan kolom pada foto."
+        ],
+        "seconds": 3.81
+      },
+      {
+        "id": "spa-clear",
+        "language": "spa",
+        "variant": "clear",
+        "kind": "controlled-synthetic-label",
+        "passed": true,
+        "basisCorrect": true,
+        "fields": {
+          "calories": {
+            "expected": 240,
+            "actual": 240,
+            "correct": true
+          },
+          "proteinG": {
+            "expected": 5.5,
+            "actual": 5.5,
+            "correct": true
+          },
+          "carbsG": {
+            "expected": 30,
+            "actual": 30,
+            "correct": true
+          },
+          "fatG": {
+            "expected": 9,
+            "actual": 9,
+            "correct": true
+          },
+          "fiberG": {
+            "expected": 2,
+            "actual": 2,
+            "correct": true
+          },
+          "sugarG": {
+            "expected": 0,
+            "actual": 0,
+            "correct": true
+          },
+          "sodiumMg": {
+            "expected": 120,
+            "actual": 120,
+            "correct": true
+          }
+        },
+        "warnings": [
+          "Hasil pembaca teks lokal. Periksa kembali semua angka, satuan, dan kolom pada foto."
+        ],
+        "seconds": 4.417
+      },
+      {
+        "id": "spa-degraded",
+        "language": "spa",
+        "variant": "degraded",
+        "kind": "controlled-synthetic-label",
+        "passed": true,
+        "basisCorrect": true,
+        "fields": {
+          "calories": {
+            "expected": 240,
+            "actual": 240,
+            "correct": true
+          },
+          "proteinG": {
+            "expected": 5.5,
+            "actual": 5.5,
+            "correct": true
+          },
+          "carbsG": {
+            "expected": 30,
+            "actual": 30,
+            "correct": true
+          },
+          "fatG": {
+            "expected": 9,
+            "actual": 9,
+            "correct": true
+          },
+          "fiberG": {
+            "expected": 2,
+            "actual": 2,
+            "correct": true
+          },
+          "sugarG": {
+            "expected": 0,
+            "actual": 0,
+            "correct": true
+          },
+          "sodiumMg": {
+            "expected": 120,
+            "actual": 120,
+            "correct": true
+          }
+        },
+        "warnings": [
+          "Hasil pembaca teks lokal. Periksa kembali semua angka, satuan, dan kolom pada foto.",
+          "Baris sugar belum terbaca sebagai satu jumlah yang pasti.",
+          "Nilai kosong berarti belum diketahui, bukan nol. Lengkapi dari label sebelum mencatat."
+        ],
+        "seconds": 4.43
+      },
+      {
+        "id": "spa-skewed",
+        "language": "spa",
+        "variant": "skewed",
+        "kind": "controlled-synthetic-label",
+        "passed": true,
+        "basisCorrect": true,
+        "fields": {
+          "calories": {
+            "expected": 240,
+            "actual": 240,
+            "correct": true
+          },
+          "proteinG": {
+            "expected": 5.5,
+            "actual": 5.5,
+            "correct": true
+          },
+          "carbsG": {
+            "expected": 30,
+            "actual": 30,
+            "correct": true
+          },
+          "fatG": {
+            "expected": 9,
+            "actual": 9,
+            "correct": true
+          },
+          "fiberG": {
+            "expected": 2,
+            "actual": 2,
+            "correct": true
+          },
+          "sugarG": {
+            "expected": 0,
+            "actual": 0,
+            "correct": true
+          },
+          "sodiumMg": {
+            "expected": 120,
+            "actual": 120,
+            "correct": true
+          }
+        },
+        "warnings": [
+          "Hasil pembaca teks lokal. Periksa kembali semua angka, satuan, dan kolom pada foto.",
+          "Baris protein belum terbaca sebagai satu jumlah yang pasti.",
+          "Nilai kosong berarti belum diketahui, bukan nol. Lengkapi dari label sebelum mencatat.",
+          "Baris sugar belum terbaca sebagai satu jumlah yang pasti."
+        ],
+        "seconds": 4.739
+      },
+      {
+        "id": "deu-clear",
+        "language": "deu",
+        "variant": "clear",
+        "kind": "controlled-synthetic-label",
+        "passed": true,
+        "basisCorrect": true,
+        "fields": {
+          "calories": {
+            "expected": 240,
+            "actual": 240,
+            "correct": true
+          },
+          "proteinG": {
+            "expected": 5.5,
+            "actual": 5.5,
+            "correct": true
+          },
+          "carbsG": {
+            "expected": 30,
+            "actual": 30,
+            "correct": true
+          },
+          "fatG": {
+            "expected": 9,
+            "actual": 9,
+            "correct": true
+          },
+          "fiberG": {
+            "expected": 2,
+            "actual": 2,
+            "correct": true
+          },
+          "sugarG": {
+            "expected": 0,
+            "actual": 0,
+            "correct": true
+          },
+          "sodiumMg": {
+            "expected": 120,
+            "actual": 120,
+            "correct": true
+          }
+        },
+        "warnings": [
+          "Hasil pembaca teks lokal. Periksa kembali semua angka, satuan, dan kolom pada foto."
+        ],
+        "seconds": 11.528
+      },
+      {
+        "id": "deu-degraded",
+        "language": "deu",
+        "variant": "degraded",
+        "kind": "controlled-synthetic-label",
+        "passed": true,
+        "basisCorrect": true,
+        "fields": {
+          "calories": {
+            "expected": 240,
+            "actual": 240,
+            "correct": true
+          },
+          "proteinG": {
+            "expected": 5.5,
+            "actual": 5.5,
+            "correct": true
+          },
+          "carbsG": {
+            "expected": 30,
+            "actual": 30,
+            "correct": true
+          },
+          "fatG": {
+            "expected": 9,
+            "actual": 9,
+            "correct": true
+          },
+          "fiberG": {
+            "expected": 2,
+            "actual": 2,
+            "correct": true
+          },
+          "sugarG": {
+            "expected": 0,
+            "actual": 0,
+            "correct": true
+          },
+          "sodiumMg": {
+            "expected": 120,
+            "actual": 120,
+            "correct": true
+          }
+        },
+        "warnings": [
+          "Hasil pembaca teks lokal. Periksa kembali semua angka, satuan, dan kolom pada foto."
+        ],
+        "seconds": 21.625
+      },
+      {
+        "id": "deu-skewed",
+        "language": "deu",
+        "variant": "skewed",
+        "kind": "controlled-synthetic-label",
+        "passed": true,
+        "basisCorrect": true,
+        "fields": {
+          "calories": {
+            "expected": 240,
+            "actual": 240,
+            "correct": true
+          },
+          "proteinG": {
+            "expected": 5.5,
+            "actual": 5.5,
+            "correct": true
+          },
+          "carbsG": {
+            "expected": 30,
+            "actual": 30,
+            "correct": true
+          },
+          "fatG": {
+            "expected": 9,
+            "actual": 9,
+            "correct": true
+          },
+          "fiberG": {
+            "expected": 2,
+            "actual": 2,
+            "correct": true
+          },
+          "sugarG": {
+            "expected": 0,
+            "actual": 0,
+            "correct": true
+          },
+          "sodiumMg": {
+            "expected": 120,
+            "actual": 120,
+            "correct": true
+          }
+        },
+        "warnings": [
+          "Hasil pembaca teks lokal. Periksa kembali semua angka, satuan, dan kolom pada foto."
+        ],
+        "seconds": 17.975
+      },
+      {
+        "id": "jpn-clear",
+        "language": "jpn",
+        "variant": "clear",
+        "kind": "controlled-synthetic-label",
+        "passed": true,
+        "basisCorrect": true,
+        "fields": {
+          "calories": {
+            "expected": 240,
+            "actual": 240,
+            "correct": true
+          },
+          "proteinG": {
+            "expected": 5.5,
+            "actual": 5.5,
+            "correct": true
+          },
+          "carbsG": {
+            "expected": 30,
+            "actual": 30,
+            "correct": true
+          },
+          "fatG": {
+            "expected": 9,
+            "actual": 9,
+            "correct": true
+          },
+          "fiberG": {
+            "expected": 2,
+            "actual": 2,
+            "correct": true
+          },
+          "sugarG": {
+            "expected": 0,
+            "actual": 0,
+            "correct": true
+          },
+          "sodiumMg": {
+            "expected": 120,
+            "actual": 120,
+            "correct": true
+          }
+        },
+        "warnings": [
+          "Hasil pembaca teks lokal. Periksa kembali semua angka, satuan, dan kolom pada foto.",
+          "Natrium dihitung dari garam: garam dibagi 2,5, lalu diubah ke mg.",
+          "Nilai kosong berarti belum diketahui, bukan nol. Lengkapi dari label sebelum mencatat."
+        ],
+        "seconds": 7.013
+      },
+      {
+        "id": "jpn-degraded",
+        "language": "jpn",
+        "variant": "degraded",
+        "kind": "controlled-synthetic-label",
+        "passed": true,
+        "basisCorrect": true,
+        "fields": {
+          "calories": {
+            "expected": 240,
+            "actual": 240,
+            "correct": true
+          },
+          "proteinG": {
+            "expected": 5.5,
+            "actual": 5.5,
+            "correct": true
+          },
+          "carbsG": {
+            "expected": 30,
+            "actual": 30,
+            "correct": true
+          },
+          "fatG": {
+            "expected": 9,
+            "actual": 9,
+            "correct": true
+          },
+          "fiberG": {
+            "expected": 2,
+            "actual": 2,
+            "correct": true
+          },
+          "sugarG": {
+            "expected": 0,
+            "actual": 0,
+            "correct": true
+          },
+          "sodiumMg": {
+            "expected": 120,
+            "actual": 120,
+            "correct": true
+          }
+        },
+        "warnings": [
+          "Hasil pembaca teks lokal. Periksa kembali semua angka, satuan, dan kolom pada foto.",
+          "Natrium dihitung dari garam: garam dibagi 2,5, lalu diubah ke mg."
+        ],
+        "seconds": 3.956
+      },
+      {
+        "id": "jpn-skewed",
+        "language": "jpn",
+        "variant": "skewed",
+        "kind": "controlled-synthetic-label",
+        "passed": true,
+        "basisCorrect": true,
+        "fields": {
+          "calories": {
+            "expected": 240,
+            "actual": 240,
+            "correct": true
+          },
+          "proteinG": {
+            "expected": 5.5,
+            "actual": 5.5,
+            "correct": true
+          },
+          "carbsG": {
+            "expected": 30,
+            "actual": 30,
+            "correct": true
+          },
+          "fatG": {
+            "expected": 9,
+            "actual": 9,
+            "correct": true
+          },
+          "fiberG": {
+            "expected": 2,
+            "actual": 2,
+            "correct": true
+          },
+          "sugarG": {
+            "expected": 0,
+            "actual": 0,
+            "correct": true
+          },
+          "sodiumMg": {
+            "expected": 120,
+            "actual": 120,
+            "correct": true
+          }
+        },
+        "warnings": [
+          "Hasil pembaca teks lokal. Periksa kembali semua angka, satuan, dan kolom pada foto.",
+          "Natrium dihitung dari garam: garam dibagi 2,5, lalu diubah ke mg."
+        ],
+        "seconds": 3.47
+      },
+      {
+        "id": "ara-clear",
+        "language": "ara",
+        "variant": "clear",
+        "kind": "controlled-synthetic-label",
+        "passed": false,
+        "error": "no_nutrition_label",
+        "seconds": 2.942
+      },
+      {
+        "id": "ara-degraded",
+        "language": "ara",
+        "variant": "degraded",
+        "kind": "controlled-synthetic-label",
+        "passed": false,
+        "error": "no_nutrition_label",
+        "seconds": 2.852
+      },
+      {
+        "id": "ara-skewed",
+        "language": "ara",
+        "variant": "skewed",
+        "kind": "controlled-synthetic-label",
+        "passed": false,
+        "error": "no_nutrition_label",
+        "seconds": 3.997
+      },
+      {
+        "id": "chi_sim-clear",
+        "language": "chi_sim",
+        "variant": "clear",
+        "kind": "controlled-synthetic-label",
+        "passed": true,
+        "basisCorrect": true,
+        "fields": {
+          "calories": {
+            "expected": 240,
+            "actual": 240,
+            "correct": true
+          },
+          "proteinG": {
+            "expected": 5.5,
+            "actual": 5.5,
+            "correct": true
+          },
+          "carbsG": {
+            "expected": 30,
+            "actual": 30,
+            "correct": true
+          },
+          "fatG": {
+            "expected": 9,
+            "actual": 9,
+            "correct": true
+          },
+          "fiberG": {
+            "expected": 2,
+            "actual": 2,
+            "correct": true
+          },
+          "sugarG": {
+            "expected": 0,
+            "actual": 0,
+            "correct": true
+          },
+          "sodiumMg": {
+            "expected": 120,
+            "actual": 120,
+            "correct": true
+          }
+        },
+        "warnings": [
+          "Hasil pembaca teks lokal. Periksa kembali semua angka, satuan, dan kolom pada foto.",
+          "Kalori dikonversi dari kJ dengan faktor 4,184 kJ per kkal.",
+          "Baris energy belum terbaca sebagai satu jumlah yang pasti.",
+          "Nilai kosong berarti belum diketahui, bukan nol. Lengkapi dari label sebelum mencatat."
+        ],
+        "seconds": 4.43
+      },
+      {
+        "id": "chi_sim-degraded",
+        "language": "chi_sim",
+        "variant": "degraded",
+        "kind": "controlled-synthetic-label",
+        "passed": true,
+        "basisCorrect": true,
+        "fields": {
+          "calories": {
+            "expected": 240,
+            "actual": 240,
+            "correct": true
+          },
+          "proteinG": {
+            "expected": 5.5,
+            "actual": 5.5,
+            "correct": true
+          },
+          "carbsG": {
+            "expected": 30,
+            "actual": 30,
+            "correct": true
+          },
+          "fatG": {
+            "expected": 9,
+            "actual": 9,
+            "correct": true
+          },
+          "fiberG": {
+            "expected": 2,
+            "actual": 2,
+            "correct": true
+          },
+          "sugarG": {
+            "expected": 0,
+            "actual": 0,
+            "correct": true
+          },
+          "sodiumMg": {
+            "expected": 120,
+            "actual": 120,
+            "correct": true
+          }
+        },
+        "warnings": [
+          "Hasil pembaca teks lokal. Periksa kembali semua angka, satuan, dan kolom pada foto.",
+          "Kalori dikonversi dari kJ dengan faktor 4,184 kJ per kkal.",
+          "Baris energy belum terbaca sebagai satu jumlah yang pasti.",
+          "Nilai kosong berarti belum diketahui, bukan nol. Lengkapi dari label sebelum mencatat."
+        ],
+        "seconds": 4.522
+      },
+      {
+        "id": "chi_sim-skewed",
+        "language": "chi_sim",
+        "variant": "skewed",
+        "kind": "controlled-synthetic-label",
+        "passed": false,
+        "basisCorrect": true,
+        "fields": {
+          "calories": {
+            "expected": 240,
+            "actual": null,
+            "correct": false
+          },
+          "proteinG": {
+            "expected": 5.5,
+            "actual": 5.5,
+            "correct": true
+          },
+          "carbsG": {
+            "expected": 30,
+            "actual": 30,
+            "correct": true
+          },
+          "fatG": {
+            "expected": 9,
+            "actual": 9,
+            "correct": true
+          },
+          "fiberG": {
+            "expected": 2,
+            "actual": 2,
+            "correct": true
+          },
+          "sugarG": {
+            "expected": 0,
+            "actual": 0,
+            "correct": true
+          },
+          "sodiumMg": {
+            "expected": 120,
+            "actual": 120,
+            "correct": true
+          }
+        },
+        "warnings": [
+          "Hasil pembaca teks lokal. Periksa kembali semua angka, satuan, dan kolom pada foto.",
+          "Baris energy belum terbaca sebagai satu jumlah yang pasti.",
+          "Nilai kosong berarti belum diketahui, bukan nol. Lengkapi dari label sebelum mencatat."
+        ],
+        "seconds": 4.961
+      },
+      {
+        "id": "hin-clear",
+        "language": "hin",
+        "variant": "clear",
+        "kind": "controlled-synthetic-label",
+        "passed": false,
+        "basisCorrect": false,
+        "fields": {
+          "calories": {
+            "expected": 240,
+            "actual": null,
+            "correct": false
+          },
+          "proteinG": {
+            "expected": 5.5,
+            "actual": null,
+            "correct": false
+          },
+          "carbsG": {
+            "expected": 30,
+            "actual": null,
+            "correct": false
+          },
+          "fatG": {
+            "expected": 9,
+            "actual": null,
+            "correct": false
+          },
+          "fiberG": {
+            "expected": 2,
+            "actual": null,
+            "correct": false
+          },
+          "sugarG": {
+            "expected": 0,
+            "actual": null,
+            "correct": false
+          },
+          "sodiumMg": {
+            "expected": 120,
+            "actual": null,
+            "correct": false
+          }
+        },
+        "warnings": [
+          "Hasil pembaca teks lokal. Periksa kembali semua angka, satuan, dan kolom pada foto.",
+          "Baris energy belum terbaca sebagai satu jumlah yang pasti.",
+          "Baris sodium belum terbaca sebagai satu jumlah yang pasti.",
+          "Acuan per 100 g/ml atau per porsi belum jelas. Lengkapi sebelum menghitung porsi.",
+          "Nilai kosong berarti belum diketahui, bukan nol. Lengkapi dari label sebelum mencatat."
+        ],
+        "seconds": 4.876
+      },
+      {
+        "id": "hin-degraded",
+        "language": "hin",
+        "variant": "degraded",
+        "kind": "controlled-synthetic-label",
+        "passed": false,
+        "basisCorrect": false,
+        "fields": {
+          "calories": {
+            "expected": 240,
+            "actual": null,
+            "correct": false
+          },
+          "proteinG": {
+            "expected": 5.5,
+            "actual": null,
+            "correct": false
+          },
+          "carbsG": {
+            "expected": 30,
+            "actual": null,
+            "correct": false
+          },
+          "fatG": {
+            "expected": 9,
+            "actual": null,
+            "correct": false
+          },
+          "fiberG": {
+            "expected": 2,
+            "actual": null,
+            "correct": false
+          },
+          "sugarG": {
+            "expected": 0,
+            "actual": null,
+            "correct": false
+          },
+          "sodiumMg": {
+            "expected": 120,
+            "actual": null,
+            "correct": false
+          }
+        },
+        "warnings": [
+          "Hasil pembaca teks lokal. Periksa kembali semua angka, satuan, dan kolom pada foto.",
+          "Baris energy belum terbaca sebagai satu jumlah yang pasti.",
+          "Baris sodium belum terbaca sebagai satu jumlah yang pasti.",
+          "Acuan per 100 g/ml atau per porsi belum jelas. Lengkapi sebelum menghitung porsi.",
+          "Nilai kosong berarti belum diketahui, bukan nol. Lengkapi dari label sebelum mencatat."
+        ],
+        "seconds": 3.793
+      },
+      {
+        "id": "hin-skewed",
+        "language": "hin",
+        "variant": "skewed",
+        "kind": "controlled-synthetic-label",
+        "passed": false,
+        "basisCorrect": false,
+        "fields": {
+          "calories": {
+            "expected": 240,
+            "actual": null,
+            "correct": false
+          },
+          "proteinG": {
+            "expected": 5.5,
+            "actual": null,
+            "correct": false
+          },
+          "carbsG": {
+            "expected": 30,
+            "actual": null,
+            "correct": false
+          },
+          "fatG": {
+            "expected": 9,
+            "actual": null,
+            "correct": false
+          },
+          "fiberG": {
+            "expected": 2,
+            "actual": null,
+            "correct": false
+          },
+          "sugarG": {
+            "expected": 0,
+            "actual": null,
+            "correct": false
+          },
+          "sodiumMg": {
+            "expected": 120,
+            "actual": null,
+            "correct": false
+          }
+        },
+        "warnings": [
+          "Hasil pembaca teks lokal. Periksa kembali semua angka, satuan, dan kolom pada foto.",
+          "Baris energy belum terbaca sebagai satu jumlah yang pasti.",
+          "Baris sodium belum terbaca sebagai satu jumlah yang pasti.",
+          "Acuan per 100 g/ml atau per porsi belum jelas. Lengkapi sebelum menghitung porsi.",
+          "Nilai kosong berarti belum diketahui, bukan nol. Lengkapi dari label sebelum mencatat."
+        ],
+        "seconds": 3.374
+      }
+    ]
+  },
+  "realPhotos": {
+    "originalPhotos": 6,
+    "manuallyCroppedPhotos": 2,
+    "singleColumnCases": 3,
+    "completeSingleColumnReads": 0,
+    "rejectionOrAbstentionCases": 5,
+    "safeRejectionsOrAbstentions": 5,
+    "records": [
+      {
+        "id": "eng-front-negative",
+        "language": "eng",
+        "variant": "original-selected-photo",
+        "kind": "real-package-photo",
+        "passed": true,
+        "error": "no_nutrition_label",
+        "seconds": 5.134,
+        "outcome": "reject-front-without-table",
+        "source": "https://images.openfoodfacts.org/images/products/301/762/042/2003/nutrition_en.822.full.jpg",
+        "attribution": "openfoodfacts-contributors, Open Food Facts contributors",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "sha256": "d11697b644b631a42611b8195dd966b25515ed7d7b3edef4622e830313e46b6d"
+      },
+      {
+        "id": "spa-serving",
+        "language": "spa",
+        "variant": "original-selected-photo",
+        "kind": "real-package-photo",
+        "passed": false,
+        "error": "analysis_timeout",
+        "seconds": 25.014,
+        "outcome": "read-visible-single-column",
+        "source": "https://images.openfoodfacts.org/images/products/301/762/042/2003/nutrition_es.231.full.jpg",
+        "attribution": "openfoodfactsmx, Open Food Facts contributors",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "sha256": "386f20829029db0af9449c4eaf4761f8c386320cde54c9a652dda7d538f7463c"
+      },
+      {
+        "id": "fra-multi-column",
+        "language": "fra",
+        "variant": "original-selected-photo",
+        "kind": "real-package-photo",
+        "passed": true,
+        "basisCorrect": true,
+        "fields": {
+          "calories": {
+            "expected": null,
+            "actual": null,
+            "correct": true
+          },
+          "proteinG": {
+            "expected": null,
+            "actual": null,
+            "correct": true
+          },
+          "carbsG": {
+            "expected": null,
+            "actual": null,
+            "correct": true
+          },
+          "fatG": {
+            "expected": null,
+            "actual": null,
+            "correct": true
+          },
+          "fiberG": {
+            "expected": null,
+            "actual": null,
+            "correct": true
+          },
+          "sugarG": {
+            "expected": null,
+            "actual": null,
+            "correct": true
+          },
+          "sodiumMg": {
+            "expected": null,
+            "actual": null,
+            "correct": true
+          }
+        },
+        "warnings": [
+          "Hasil pembaca teks lokal. Periksa kembali semua angka, satuan, dan kolom pada foto.",
+          "Baris fat belum terbaca sebagai satu jumlah yang pasti.",
+          "Baris sugar belum terbaca sebagai satu jumlah yang pasti.",
+          "Acuan per 100 g/ml atau per porsi belum jelas. Lengkapi sebelum menghitung porsi.",
+          "Nilai kosong berarti belum diketahui, bukan nol. Lengkapi dari label sebelum mencatat."
+        ],
+        "seconds": 4.019,
+        "outcome": "abstain-or-reject-multiple-columns",
+        "source": "https://images.openfoodfacts.org/images/products/301/762/042/2003/nutrition_fr.829.full.jpg",
+        "attribution": "municorn-calorie-counter-app, Open Food Facts contributors",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "sha256": "1428676a96cd8f2f98752682009f75dd3dc1ec7944c6a6b0aad70d7a0c2723a2"
+      },
+      {
+        "id": "coke-eng-multi-column",
+        "language": "eng",
+        "variant": "original-selected-photo",
+        "kind": "real-package-photo",
+        "passed": true,
+        "basisCorrect": true,
+        "fields": {
+          "calories": {
+            "expected": null,
+            "actual": null,
+            "correct": true
+          },
+          "proteinG": {
+            "expected": null,
+            "actual": null,
+            "correct": true
+          },
+          "carbsG": {
+            "expected": null,
+            "actual": null,
+            "correct": true
+          },
+          "fatG": {
+            "expected": null,
+            "actual": null,
+            "correct": true
+          },
+          "fiberG": {
+            "expected": null,
+            "actual": null,
+            "correct": true
+          },
+          "sugarG": {
+            "expected": null,
+            "actual": null,
+            "correct": true
+          },
+          "sodiumMg": {
+            "expected": null,
+            "actual": null,
+            "correct": true
+          }
+        },
+        "warnings": [
+          "Hasil pembaca teks lokal. Periksa kembali semua angka, satuan, dan kolom pada foto.",
+          "Baris carbohydrate belum terbaca sebagai satu jumlah yang pasti.",
+          "Baris protein belum terbaca sebagai satu jumlah yang pasti.",
+          "Baris salt belum terbaca sebagai satu jumlah yang pasti.",
+          "Acuan per 100 g/ml atau per porsi belum jelas. Lengkapi sebelum menghitung porsi.",
+          "Nilai kosong berarti belum diketahui, bukan nol. Lengkapi dari label sebelum mencatat."
+        ],
+        "seconds": 10.374,
+        "outcome": "abstain-or-reject-multiple-columns",
+        "source": "https://images.openfoodfacts.org/images/products/544/900/000/0996/nutrition_en.1173.full.jpg",
+        "attribution": "macrofactor, Open Food Facts contributors",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "sha256": "8a5b6cc6554736a3ef7189b02efacf3ad97b66c1cc88f1e41d2da6e10dec37be"
+      },
+      {
+        "id": "coke-eng-single-column-crop",
+        "language": "eng",
+        "variant": "manually-isolated-100ml-column",
+        "kind": "real-package-photo",
+        "passed": false,
+        "basisCorrect": true,
+        "fields": {
+          "calories": {
+            "expected": 42,
+            "actual": null,
+            "correct": false
+          },
+          "proteinG": {
+            "expected": 0,
+            "actual": 0,
+            "correct": true
+          },
+          "carbsG": {
+            "expected": 10.6,
+            "actual": null,
+            "correct": false
+          },
+          "fatG": {
+            "expected": 0,
+            "actual": null,
+            "correct": false
+          },
+          "fiberG": {
+            "expected": null,
+            "actual": null,
+            "correct": true
+          },
+          "sugarG": {
+            "expected": 10.6,
+            "actual": null,
+            "correct": false
+          },
+          "sodiumMg": {
+            "expected": 0,
+            "actual": 0,
+            "correct": true
+          }
+        },
+        "warnings": [
+          "Hasil pembaca teks lokal. Periksa kembali semua angka, satuan, dan kolom pada foto.",
+          "Baris energy belum terbaca sebagai satu jumlah yang pasti.",
+          "Baris fat belum terbaca sebagai satu jumlah yang pasti.",
+          "Baris carbohydrate belum terbaca sebagai satu jumlah yang pasti.",
+          "Baris sugar belum terbaca sebagai satu jumlah yang pasti.",
+          "Natrium dihitung dari garam: garam dibagi 2,5, lalu diubah ke mg.",
+          "Nilai kosong berarti belum diketahui, bukan nol. Lengkapi dari label sebelum mencatat."
+        ],
+        "seconds": 5.099,
+        "outcome": "read-visible-single-column",
+        "source": "https://images.openfoodfacts.org/images/products/544/900/000/0996/nutrition_en.1173.full.jpg",
+        "attribution": "macrofactor, Open Food Facts contributors",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "sha256": "185c97a93ffb69375ba7906c467ab4f355d6425aa8dbc672aae15333d119bca6",
+        "transformation": {
+          "crop": {
+            "left": 325,
+            "top": 390,
+            "width": 298,
+            "height": 380
+          },
+          "reencodedJpeg": true
+        }
+      },
+      {
+        "id": "coke-deu-multi-column",
+        "language": "deu",
+        "variant": "original-selected-photo",
+        "kind": "real-package-photo",
+        "passed": true,
+        "error": "no_nutrition_label",
+        "seconds": 7.058,
+        "outcome": "abstain-or-reject-multiple-columns",
+        "source": "https://images.openfoodfacts.org/images/products/544/900/000/0996/nutrition_de.609.full.jpg",
+        "attribution": "lwt2, Open Food Facts contributors",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "sha256": "94901eca85f1763ee5bf45c5f4a639203a6bb87ae7cefaba8c60e59dbecadee0"
+      },
+      {
+        "id": "coke-deu-single-column-crop",
+        "language": "deu",
+        "variant": "manually-isolated-100ml-column",
+        "kind": "real-package-photo",
+        "passed": false,
+        "error": "no_nutrition_label",
+        "seconds": 6.052,
+        "outcome": "read-visible-single-column",
+        "source": "https://images.openfoodfacts.org/images/products/544/900/000/0996/nutrition_de.609.full.jpg",
+        "attribution": "lwt2, Open Food Facts contributors",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "sha256": "dd251bfdd5cdd6373c4ceed4795bcd8ec5c9970e36d645f77e7d8c9cfd80ebe6",
+        "transformation": {
+          "crop": {
+            "left": 0,
+            "top": 0,
+            "width": 935,
+            "height": 952
+          },
+          "reencodedJpeg": true
+        }
+      },
+      {
+        "id": "twix-fra-multi-column",
+        "language": "fra",
+        "variant": "original-selected-photo",
+        "kind": "real-package-photo",
+        "passed": true,
+        "error": "no_nutrition_label",
+        "seconds": 7.651,
+        "outcome": "abstain-or-reject-multiple-columns",
+        "source": "https://images.openfoodfacts.org/images/products/500/015/945/9228/nutrition_fr.236.full.jpg",
+        "attribution": "aleene, Open Food Facts contributors",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "sha256": "a329f46963a19366f524958647923c66dcbe59be40da0ddc69d9975af16b2612"
+      }
+    ]
+  },
+  "browser": {
+    "realOcr": true,
+    "mockedResponses": false,
+    "providerConfigured": false,
+    "languages": [
+      {
+        "language": "eng",
+        "actualEndpoint": 200,
+        "allSevenNutrientsAndBasisMatched": true
+      },
+      {
+        "language": "spa",
+        "actualEndpoint": 200,
+        "allSevenNutrientsAndBasisMatched": true
+      },
+      {
+        "language": "jpn",
+        "actualEndpoint": 200,
+        "allSevenNutrientsAndBasisMatched": true
+      },
+      {
+        "language": "chi_sim",
+        "actualEndpoint": 200,
+        "allSevenNutrientsAndBasisMatched": true
+      }
+    ],
+    "consoleErrors": [],
+    "screenshots": [
+      ".caltrack/ocr/browser-mobile.png",
+      ".caltrack/ocr/browser-desktop.png"
+    ],
+    "portionAndSave": {
+      "consumedGrams": 50,
+      "calories": 120,
+      "sodiumMg": 60,
+      "status": 201
+    }
+  },
+  "limitations": [
+    "Controlled synthetic labels were used during development; their results do not measure unseen real packaging accuracy",
+    "Real photos are a small convenience acceptance set, not an independent representative benchmark",
+    "Arab and Hindi labels did not produce complete reliable reads",
+    "Blur, curved labels, glare and multiple columns remain difficult",
+    "OCR confidence is not calibrated nutrient accuracy; user confirmation remains mandatory",
+    "Main cloud vision path was not tested because no provider key was configured"
+  ]
+}

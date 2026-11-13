@@ -4,6 +4,9 @@
   "private": true,
   "scripts": {
     "test": "tsx --test tests/*.test.ts tests/*.test.mjs",
+    "ocr:prepare": "node scripts/ocr/prepare.mjs",
+    "ocr:fixtures": "node scripts/ocr/fixtures.mjs",
+    "ocr:evaluate": "tsx scripts/ocr/evaluate.ts",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -19,7 +22,8 @@
     "next": "^15.5.6",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "sharp": "^0.35.5"
+    "sharp": "^0.35.5",
+    "tesseract.js": "6.0.1"
   },
   "devDependencies": {
     "@huggingface/transformers": "^3.8.1",
@@ -29,6 +33,7 @@
     "@types/react-dom": "^19.1.9",
     "daisyui": "^5.7.50",
     "drizzle-kit": "^0.31.4",
+    "playwright": "^1.65.0",
     "tailwindcss": "^4.3.3",
     "tsx": "^4.23.15",
     "typescript": "^5.9.2"
