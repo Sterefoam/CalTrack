@@ -5,7 +5,9 @@ import { drizzle } from "drizzle-orm/libsql";
 import { migrate } from "drizzle-orm/libsql/migrator";
 import { eq } from "drizzle-orm";
 import * as schema from "../db/schema";
-import { claimQuest, equipReward, getAdventure } from "../lib/adventure/service";
+import { acceptQuest, claimQuest, equipReward, getAdventure } from "../lib/adventure/service";
+import { adventureView, dailyOptionalQuests, optionalQuestDefinitions } from "../lib/adventure/quests";
+import { achievementFor } from "../lib/adventure/achievements";
 
 test("quests derive progress from owned current food logs and award XP only once", async () => {
   const client = createClient({ url: ":memory:" });
@@ -32,4 +34,53 @@ test("quests derive progress from owned current food logs and award XP only once
     // A direct duplicate write is also rejected by the storage invariant.
     await assert.rejects(database.insert(schema.questClaims).values({ userId: "a", day: complete.day, questId: "first-log", xp: 20 }));
   } finally { client.close(); }
+});
+
+test("optional quests rotate, require explicit acceptance and enforce two persisted account-scoped slots", async () => {
+  const client = createClient({ url: ":memory:" });
+  try {
+    const database = drizzle(client, { schema }); await migrate(database, { migrationsFolder: "./drizzle" });
+    await database.insert(schema.users).values(["a", "b"].map(id => ({ id, email: `${id}@example.test`, name: id, passwordHash: "test" })));
+    const before = await getAdventure("a", database);
+    assert.equal(before.optionalQuests.length, 4);
+    const [first, second, third] = before.optionalQuests;
+    await assert.rejects(claimQuest("a", first.id, database), /quest_not_accepted/);
+    const unoffered = optionalQuestDefinitions.find(quest => !before.optionalQuests.some(offered => offered.id === quest.id))!;
+    await assert.rejects(acceptQuest("a", unoffered.id, database), /invalid_quest/);
+    await assert.rejects(acceptQuest("a", "first-log", database), /invalid_quest/);
+    await acceptQuest("a", first.id, database); await acceptQuest("a", first.id, database);
+    assert.equal((await getAdventure("a", database)).optionalSlotsRemaining, 1);
+    assert.equal((await getAdventure("b", database)).optionalSlotsRemaining, 2);
+    await acceptQuest("a", second.id, database);
+    await assert.rejects(acceptQuest("a", third.id, database), /quest_slots_full/);
+    const view = await getAdventure("a", database);
+    assert.equal(view.totalXp, 0); assert.equal(view.optionalSlotsRemaining, 0);
+    // Supply qualifying current-day records for every offered metric; old and other-user logs cannot contribute.
+    for (const [index, method] of ["text", "search", "photo", "voice", "recipe"].entries()) await database.insert(schema.foodLogs).values({ userId: "a", mealType: ["breakfast", "lunch", "dinner"][index % 3] as "breakfast", inputMethod: method as "text", notes: "Catatan porsi", totalCalories: 1 });
+    const claimed = await claimQuest("a", first.id, database);
+    assert.equal(claimed.totalXp, first.xp);
+    assert.equal((await claimQuest("a", first.id, database)).totalXp, first.xp);
+    await assert.rejects(claimQuest("b", first.id, database), /quest_not_accepted/);
+    await assert.rejects(database.insert(schema.questSelections).values({ userId: "a", day: before.day, questId: third.id, slot: 3 }));
+    await assert.rejects(database.insert(schema.questSelections).values({ userId: "a", day: before.day, questId: third.id, slot: 1 }));
+    // All nine definitions appear, without repeats within a day, over a complete rotation.
+    const seen = new Set<string>();
+    for (let day = 1; day <= 9; day++) { const offered = dailyOptionalQuests(`2026-11-${String(day).padStart(2,"0")}`); assert.equal(new Set(offered.map(q => q.id)).size,4); offered.forEach(q => seen.add(q.id)); }
+    assert.equal(seen.size, 9);
+    assert.notDeepEqual(dailyOptionalQuests("2026-11-01"), dailyOptionalQuests("2026-11-02"));
+    const tomorrow = "2099-01-01";
+    await database.insert(schema.questSelections).values({ userId: "a", day: tomorrow, questId: first.id, slot: 1 });
+    assert.equal((await getAdventure("a", database)).optionalSlotsRemaining, 0);
+  } finally { client.close(); }
+});
+
+test("celebrations derive from actual XP changes and never replay on unchanged or duplicate claims", () => {
+  assert.deepEqual(dailyOptionalQuests(""), []);
+  const view = (xp: number, reward = "moon-scout") => adventureView("2026-11-14", { meals: 1, types: 1, foods: 1 }, [], xp, reward);
+  assert.equal(achievementFor(view(0),view(0)),null);
+  assert.equal(achievementFor(view(20),view(20)),null);
+  assert.equal(achievementFor(view(0),view(20))?.kind,"xp");
+  assert.deepEqual(achievementFor(view(65),view(110)), { kind:"level", level:2, xp:45, rewards:["Jubah orbit"] });
+  assert.deepEqual(achievementFor(view(290),view(310)), { kind:"level", level:4, xp:20, rewards:["Pemandu aurora"] });
+  assert.equal(achievementFor(view(100),view(100,"orbit-cloak"))?.kind,"equip");
 });

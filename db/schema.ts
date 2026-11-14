@@ -333,6 +333,14 @@ export const adventureProfiles = sqliteTable("adventure_profiles", {
   userId: text("user_id").primaryKey().references(() => users.id, { onDelete: "cascade" }),
   equippedReward: text("equipped_reward").notNull().default("moon-scout")
 });
+export const questSelections = sqliteTable("quest_selections", {
+  id: text("id").primaryKey().$defaultFn(() => randomUUID()),
+  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  day: text("day").notNull(),
+  questId: text("quest_id").notNull(),
+  slot: integer("slot").notNull(),
+  acceptedAt: integer("accepted_at", { mode: "timestamp_ms" }).notNull().$defaultFn(() => new Date())
+}, table => [uniqueIndex("quest_selections_user_day_quest").on(table.userId, table.day, table.questId), uniqueIndex("quest_selections_user_day_slot").on(table.userId, table.day, table.slot), check("quest_selection_slot_valid", sql`${table.slot} IN (1, 2)`)]);
 
 export const recipeFavorites = sqliteTable("recipe_favorites", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),

@@ -12,7 +12,7 @@ export type FoodItem = {
 
 export const mealLabels = { breakfast: "Sarapan", lunch: "Makan siang", dinner: "Makan malam", snack: "Camilan" };
 export type MealType = keyof typeof mealLabels;
-export type DemoFoodLog = { id: string; mealType: MealType; time: string; date?: string; items: FoodItem[] };
+export type DemoFoodLog = { id: string; mealType: MealType; time: string; date?: string; inputMethod?: string; notes?: string | null; items: FoodItem[] };
 export const demoTargets = { calories: 2250, proteinG: 120, carbsG: 250, fatG: 70, waterMl: 2500 };
 export const demoFoodLogs: DemoFoodLog[] = [
   { id: "demo-breakfast", mealType: "breakfast", time: "08:15", items: [{ foodName: "Oatmeal pisang & madu", weightGrams: 320, calories: 385, proteinG: 13, carbsG: 64, fatG: 11, fiberG: 7, sugarG: 18, sodiumMg: 90 }] },

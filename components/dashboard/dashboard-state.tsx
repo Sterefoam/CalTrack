@@ -77,7 +77,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
     }
     if (connection !== "demo") throw new Error("Tunggu pemeriksaan koneksi sebelum menyimpan.");
     const now = new Date();
-    const log: DemoFoodLog = { id: draft.id, mealType: draft.mealType, time: `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`, date: localDateString(now), items: structuredClone(draft.items) };
+    const log: DemoFoodLog = { id: draft.id, mealType: draft.mealType, time: `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`, date: localDateString(now), inputMethod: draft.origin === "recipe" ? "recipe" : draft.inputMethod, notes: draft.notes, items: structuredClone(draft.items) };
     setFoodLogs((logs) => logs.some((item) => item.id === log.id) ? logs : [...logs, log]);
     setFoodDraft(null);
     setSavedNotice("Catatan makanan ditambahkan. Data demo tersimpan selama sesi ini.");

@@ -1,6 +1,6 @@
 import { requireUser } from "@/lib/auth/request";
 import { InputError, readJson } from "@/lib/http/json";
-import { claimQuest, equipReward, getAdventure } from "@/lib/adventure/service";
+import { acceptQuest, claimQuest, equipReward, getAdventure } from "@/lib/adventure/service";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 const headers = { "Cache-Control": "no-store" };
@@ -13,7 +13,8 @@ export async function POST(request: Request) {
   try {
     const input = await readJson(request, 2000) as Record<string, unknown>;
     if (!input || typeof input !== "object" || Array.isArray(input)) throw new InputError("invalid_action");
-    if (input.action !== "claim" && input.action !== "equip") throw new InputError("invalid_action");
-    return Response.json(input.action === "claim" ? await claimQuest(identity.userId, input.questId) : await equipReward(identity.userId, input.rewardId), { headers });
+    if (input.action !== "claim" && input.action !== "equip" && input.action !== "accept") throw new InputError("invalid_action");
+    const result = input.action === "claim" ? await claimQuest(identity.userId, input.questId) : input.action === "accept" ? await acceptQuest(identity.userId, input.questId) : await equipReward(identity.userId, input.rewardId);
+    return Response.json(result, { headers });
   } catch (error) { return Response.json({ error: error instanceof InputError ? error.code : "adventure_unavailable" }, { status: error instanceof InputError ? error.status : 503 }); }
 }
