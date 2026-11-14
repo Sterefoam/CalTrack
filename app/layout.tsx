@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import "./night.css";
+import "./avatar.css";
 import { AppShell } from "@/components/layout/app-shell";
 import { DashboardProvider } from "@/components/dashboard/dashboard-state";
 import { AdventureProvider } from "@/components/adventure/adventure-state";

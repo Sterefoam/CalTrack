@@ -6,6 +6,7 @@ import { useDashboardState } from "@/components/dashboard/dashboard-state";
 import { previewTargets, type DemoProfile } from "@/lib/demo/profile";
 import { PhysicalFields, GoalFields } from "./profile-fields";
 import { formatNumber } from "@/lib/demo/nutrition-data";
+import { AvatarProfile } from "@/components/adventure/avatar-wardrobe";
 
 export function ProfileForm({ onboarding = false }: { onboarding?: boolean }) {
   const { profile, saveProfile, mode } = useDashboardState();
@@ -28,6 +29,7 @@ export function ProfileForm({ onboarding = false }: { onboarding?: boolean }) {
   return <div className="content-wrap logging-page">
     <header className="page-heading"><h1>{onboarding ? "Kenali kebutuhanmu" : "Profil & target"}</h1><p>Sesuaikan target harian dengan tubuh dan aktivitasmu.</p></header>
     <p className="demo-note">{mode === "demo" ? "Mode demo. Perubahan berlaku selama sesi ini di browser." : "Profil dan target disimpan di akunmu."}</p>
+    {!onboarding && <AvatarProfile />}
     <div className="profile-grid">
       <form onSubmit={submit} className="form-stack surface-panel">
         <h2 className="text-xl font-semibold">Data dirimu</h2>

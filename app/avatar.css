@@ -1,0 +1,83 @@
+.explorer-drawing {
+  --avatar-outline: #25283b;
+  --avatar-shadow: #101624;
+  --avatar-skin: #e5b692;
+  --avatar-skin-shade: #ba826a;
+  --avatar-cheek: #cd8d78;
+  --avatar-hair: #39303a;
+  --avatar-shirt: #d1d6cd;
+  --avatar-trousers: #555f74;
+  --avatar-boots: #8e6c58;
+  --avatar-bag: #b4895b;
+  --avatar-bag-flap: #8c6647;
+  --avatar-stitch: #e0c59a;
+  --avatar-metal: #e0c28a;
+  --avatar-lamp: #fff1c8;
+  --avatar-cloak: #8dc6d7;
+  --avatar-cloak-dark: #4e879c;
+}
+.explorer-drawing[data-outfit="orbit-cloak"] { --avatar-cloak: #b4add6; --avatar-cloak-dark: #706c98; }
+.explorer-drawing[data-outfit="aurora-guide"] { --avatar-cloak: #96c5ad; --avatar-cloak-dark: #527e76; }
+.explorer-avatar { display: block; width: 100%; height: 100%; overflow: visible; }
+/* Both columns share the existing canvas edges; the character gets 44%, the collection 56%. */
+.avatar-wardrobe { display: grid; grid-template-columns: minmax(0,.8fr) minmax(0,1fr); border-radius: 16px; overflow: hidden; background: var(--color-base-200); margin-bottom: 24px; scroll-margin-top: 24px; }
+.avatar-stage { background: #20283e; padding: 24px 28px; display: flex; flex-direction: column; justify-content: center; min-width: 0; }
+.avatar-stage-heading,.avatar-stage-footer,.avatar-outfit-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.avatar-stage-heading h2,.avatar-closet h2,.avatar-profile h2 { margin: 0; font-size: 16px; font-weight: 600; }
+.avatar-stage-heading > span,.avatar-stage-footer p,.avatar-outfit-title > span { font-size: 13px; color: var(--muted); margin: 0; }
+.avatar-portrait { width: 260px; height: 304px; max-width: 100%; align-self: center; margin: 8px 0; }
+.avatar-stage .ui-progress { margin-top: 8px; color: var(--accent); }
+.avatar-stage > .field-help { margin: 6px 0 0; }
+.avatar-motion-toggle { min-height: 44px; background: none; border: 0; padding: 0 4px; font-size: 13px; color: var(--muted); cursor: pointer; text-decoration: underline; text-underline-offset: 4px; }
+.avatar-motion-toggle:hover { color: var(--ink); }
+.avatar-closet { padding: 26px 28px; min-width: 0; }
+.avatar-closet > .field-help { margin: 6px 0 16px; }
+.avatar-options { display: grid; gap: 6px; }
+.avatar-option { display: flex; width: 100%; align-items: center; gap: 12px; padding: 5px 12px 5px 5px; border: 1px solid transparent; border-radius: 10px; color: var(--ink); background: transparent; text-align: left; cursor: pointer; }
+.avatar-option:hover { background: var(--color-base-300); }
+.avatar-option[aria-pressed="true"] { background: var(--color-base-300); border-color: var(--muted); }
+.avatar-option > .explorer-avatar { flex: 0 0 56px; width: 56px; height: 65px; }
+.avatar-option > span:nth-child(2) { flex: 1; min-width: 0; }
+.avatar-option strong { display: block; font-size: 14px; font-weight: 500; }
+.avatar-option small { display: block; margin-top: 4px; color: var(--muted); font-size: 13px; }
+.avatar-option-mark { flex: 0 0 16px; color: var(--accent); }
+.avatar-outfit-details { padding-top: 16px; margin-top: 16px; border-top: 1px solid var(--line); }
+.avatar-outfit-title { flex-wrap: wrap; gap: 6px; }
+.avatar-outfit-title h3 { margin: 0; font-size: 15px; font-weight: 600; }
+.avatar-outfit-details > p { font-size: 13px; line-height: 1.6; margin: 8px 0; }
+.avatar-outfit-details > .ui-btn { margin-top: 6px; min-height: 44px; width: 100%; }
+.avatar-error { font-size: 13px; color: var(--muted); margin-top: 12px; }
+.avatar-profile { display: flex; align-items: center; gap: 24px; padding: 16px 24px; margin: 16px 0 24px; border-radius: 16px; background: var(--color-base-200); }
+.avatar-profile > .explorer-avatar { width: 108px; height: 126px; flex: 0 0 108px; }
+.avatar-profile > div { min-width: 0; }
+.avatar-profile p { margin: 8px 0; font-size: 14px; }
+.avatar-profile .field-help { font-size: 13px; }
+.avatar-profile .text-button { display: inline-flex; align-items: center; min-height: 44px; text-decoration: underline; text-underline-offset: 4px; }
+.is-alive .avatar-breath { transform-origin: 120px 218px; animation: avatar-breathe 5.6s ease-in-out infinite; }
+.is-alive .avatar-head { transform-origin: 120px 124px; animation: avatar-listen 11s ease-in-out infinite; }
+.is-alive .avatar-eyes { transform-origin: 122px 92px; animation: avatar-blink 6.8s linear infinite; }
+.is-alive .avatar-cape { transform-origin: 120px 130px; animation: avatar-fabric 5.6s ease-in-out infinite; }
+.avatar-portrait[data-paused="true"] .is-alive :is(.avatar-breath,.avatar-head,.avatar-eyes,.avatar-cape) { animation-play-state: paused; }
+@keyframes avatar-breathe { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-1.5px) rotate(.3deg); } }
+@keyframes avatar-listen { 0%,40%,100% { transform: rotate(0); } 65%,78% { transform: rotate(1.3deg); } }
+@keyframes avatar-blink { 0%,42%,45%,94%,97%,100% { transform: scaleY(1); } 43.5%,95.5% { transform: scaleY(.1); } }
+@keyframes avatar-fabric { 0%,100% { transform: rotate(0); } 50% { transform: rotate(-.6deg); } }
+@media (max-width:700px) {
+  .avatar-wardrobe { grid-template-columns: 1fr; }
+  .avatar-stage { padding: 20px 22px; }
+  .avatar-portrait { width: 184px; height: 215px; margin: 4px 0; }
+  .avatar-closet { padding: 22px; }
+  .avatar-options { grid-template-columns: repeat(3,minmax(0,1fr)); }
+  .avatar-option { position: relative; flex-direction: column; gap: 4px; padding: 10px 4px; text-align: center; }
+  .avatar-option > .explorer-avatar { flex-basis: auto; }
+  .avatar-option strong { font-size: 13px; line-height: 1.4; min-height: 37px; }
+  .avatar-option small { font-size: 12px; line-height: 1.4; }
+  .avatar-option-mark { position: absolute; top: 6px; right: 5px; }
+  .avatar-profile { gap: 12px; padding: 16px; align-items: center; }
+  .avatar-profile > .explorer-avatar { width: 80px; height: 108px; flex-basis: 80px; }
+  .avatar-profile h2 { font-size: 15px; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .avatar-motion-toggle { display: none; }
+  .is-alive .avatar-breath,.is-alive .avatar-head,.is-alive .avatar-eyes,.is-alive .avatar-cape { animation: none; }
+}

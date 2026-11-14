@@ -36,6 +36,31 @@ try {
     }
     await page.getByRole('button', { name: 'Tutup pemberitahuan pencapaian' }).click();
   }
+  console.log('Checking avatar previews, visible accessories and demo equipment.');
+  const portrait = page.locator('.avatar-portrait');
+  await page.getByRole('button', { name: 'Lihat Pemandu aurora', exact: true }).click();
+  assert.equal(await portrait.locator('[data-accessory="hat"]').count(), 1);
+  assert.equal(await portrait.locator('[data-accessory="lantern"]').count(), 1);
+  assert.equal(await page.getByRole('button', { name: 'Belum terbuka', exact: true }).isDisabled(), true);
+  await portrait.screenshot({ path: output + '/avatar-aurora.png' });
+  await page.getByRole('button', { name: 'Lihat Jubah orbit', exact: true }).click();
+  assert.equal(await portrait.locator('[data-accessory="moon-brooch"]').count(), 1);
+  assert.equal(await portrait.locator('[data-accessory="cloak"]').count(), 1);
+  await page.getByRole('button', { name: 'Jeda gerak', exact: true }).click();
+  assert.equal(await portrait.locator('.avatar-breath').evaluate(el => getComputedStyle(el).animationName), 'none');
+  await page.getByRole('button', { name: 'Aktifkan gerak', exact: true }).click();
+  assert.equal(await portrait.locator('.avatar-breath').evaluate(el => getComputedStyle(el).animationName), 'avatar-breathe');
+  await page.getByRole('button', { name: 'Pakai penampilan', exact: true }).click();
+  await page.getByRole('heading', { name: 'Penampilan baru dipakai', exact: true }).waitFor();
+  await page.getByRole('button', { name: 'Tutup pemberitahuan pencapaian' }).click();
+  await page.getByRole('navigation', { name: 'Navigasi cepat' }).getByRole('link', { name: 'Profil', exact: true }).click();
+  await page.locator('.avatar-profile [data-outfit="orbit-cloak"]').waitFor();
+  await page.screenshot({ path: output + '/avatar-profile-mobile.png', fullPage: true });
+  await page.getByRole('navigation', { name: 'Navigasi cepat' }).getByRole('link', { name: 'Markas', exact: true }).click();
+  await page.locator('.night-explorer [data-outfit="orbit-cloak"]').waitFor();
+  await page.screenshot({ path: output + '/avatar-home-mobile.png' });
+  await page.getByRole('navigation', { name: 'Navigasi cepat' }).getByRole('link', { name: 'Quest', exact: true }).click();
+  await portrait.locator('[data-outfit="orbit-cloak"]').waitFor();
   const optional = page.locator('.optional-quests');
   await optional.getByRole('button', { name: 'Pilih quest', exact: true }).first().click();
   await optional.getByRole('button', { name: 'Pilih quest', exact: true }).first().click();
@@ -78,7 +103,7 @@ try {
   await page.locator('.quest-board > .quest-list').getByRole('button', { name: 'Ambil XP', exact: true }).first().click();
   await page.locator('.achievement-toast').waitFor();
   await new Promise(resolve => setTimeout(resolve, 1600));
-  assert.match(await page.locator('.journey-summary').innerText(), new RegExp(`${selected.xp + 20} XP terkumpul`));
+  assert.match(await page.locator('.avatar-stage').innerText(), new RegExp(`${selected.xp + 20} XP terkumpul`));
   await page.unroute('**/api/adventure');
   await page.getByRole('button', { name: 'Tutup pemberitahuan pencapaian' }).click();
   await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -86,16 +111,27 @@ try {
   await page.locator('.achievement-toast').waitFor();
   assert.equal(await page.locator('.achievement-toast').evaluate(el => getComputedStyle(el).animationName), 'none');
   assert.equal(await page.locator('.achievement-emblem').evaluate(el => getComputedStyle(el).animationName), 'none');
+  assert.equal(await portrait.locator('.avatar-breath').evaluate(el => getComputedStyle(el).animationName), 'none');
+  assert.equal(await portrait.locator('.avatar-eyes').evaluate(el => getComputedStyle(el).animationName), 'none');
   await page.getByRole('button', { name: 'Tutup pemberitahuan pencapaian' }).click();
   await page.reload(); await optional.waitFor();
   assert.equal(await page.locator('.achievement-toast').count(), 0);
-  for (const width of [1440,768,390]) {
+  await page.locator('.quest-board > .quest-list').getByRole('button', { name: 'Ambil XP', exact: true }).first().click();
+  await page.locator('.achievement-toast').waitFor();
+  await page.getByRole('button', { name: 'Tutup pemberitahuan pencapaian' }).click();
+  await page.getByRole('button', { name: 'Lihat Jubah orbit', exact: true }).click();
+  await page.getByRole('button', { name: 'Pakai penampilan', exact: true }).click();
+  await page.getByRole('heading', { name: 'Penampilan baru dipakai', exact: true }).waitFor();
+  assert.equal((await read()).equippedReward, 'orbit-cloak');
+  await page.reload(); await portrait.locator('[data-outfit="orbit-cloak"]').waitFor();
+  assert.equal(await page.locator('.achievement-toast').count(), 0);
+  for (const width of [1440,768,390,320]) {
     await page.setViewportSize({ width, height: 900 });
     assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `Overflow at ${width}`);
     await page.screenshot({ path: `${output}/account-${width}.png`, fullPage: true });
   }
   assert.deepEqual(errors, []);
-  await writeFile(output + '/result.json', JSON.stringify({ passed: true, checks: ['XP and level animation', 'reward unlock', 'two optional slots', 'concurrent acceptance cap', 'idempotent claim', 'persisted selection', 'stale read protection', 'reduced motion', 'no replay on reload', 'desktop/tablet/mobile bounds'] }, null, 2));
+  await writeFile(output + '/result.json', JSON.stringify({ passed: true, checks: ['XP and level animation', 'reward unlock', 'locked outfit preview', 'visible clothing and accessories', 'motion pause', 'shared profile and home avatar', 'persisted avatar equipment', 'two optional slots', 'concurrent acceptance cap', 'idempotent claim', 'persisted selection', 'stale read protection', 'reduced motion', 'no replay on reload', 'desktop/tablet/mobile bounds'] }, null, 2));
   console.log('Passed: adventure choices, animation, persistence, concurrency, stale reads and reduced motion.');
 } catch (error) { console.error(error); throw error; } finally {
   // Terminate only this disposable browser. Edge can retain its process after a
