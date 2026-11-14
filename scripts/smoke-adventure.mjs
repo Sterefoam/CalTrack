@@ -1,12 +1,14 @@
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
 import { randomBytes } from 'node:crypto';
+import { spawnSync } from 'node:child_process';
 import { mkdir, writeFile } from 'node:fs/promises';
 
 // Run against the disposable verification server, never against a real account.
 const origin = process.env.CALTRACK_TEST_ORIGIN ?? 'http://127.0.0.1:32187';
 assert(['127.0.0.1','localhost'].includes(new URL(origin).hostname), 'Use a local verification server');
-const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH ?? 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe', headless: true });
+const browserServer = await chromium.launchServer({ executablePath: process.env.CHROME_PATH ?? 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe', headless: true });
+const browser = await chromium.connect(browserServer.wsEndpoint());
 const output = '.taste-skill/adventure-flows';
 await mkdir(output, { recursive: true });
 const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
@@ -95,4 +97,25 @@ try {
   assert.deepEqual(errors, []);
   await writeFile(output + '/result.json', JSON.stringify({ passed: true, checks: ['XP and level animation', 'reward unlock', 'two optional slots', 'concurrent acceptance cap', 'idempotent claim', 'persisted selection', 'stale read protection', 'reduced motion', 'no replay on reload', 'desktop/tablet/mobile bounds'] }, null, 2));
   console.log('Passed: adventure choices, animation, persistence, concurrency, stale reads and reduced motion.');
-} catch (error) { console.error(error); throw error; } finally { await context.close(); await browser.close(); }
+} catch (error) { console.error(error); throw error; } finally {
+  // Terminate only this disposable browser. Edge can retain its process after a
+  // graceful context close on Windows, even after all assertions have passed.
+  if (process.platform === 'win32') {
+    // Invoke the executable directly: the shell-based taskkill used by
+    // Playwright can fail to resolve in restricted Windows environments.
+    const killed = spawnSync(`${process.env.SystemRoot ?? 'C:/Windows'}/System32/taskkill.exe`, ['/PID', String(browserServer.process().pid), '/T', '/F'], { windowsHide: true, encoding: 'utf8' });
+    if (killed.status !== 0 && browserServer.process().exitCode === null) throw new Error(`Cannot close test browser: ${killed.stderr || killed.error?.message}`);
+  } else browserServer.process().kill();
+  // The browser is stopped above. Bound upstream websocket cleanup too: the
+  // standalone runner must not linger on retained Playwright handles on Windows.
+  let cleanupTimer;
+  try {
+    await Promise.race([
+      Promise.all([browser.close(), browserServer.kill()]),
+      new Promise(resolve => { cleanupTimer = setTimeout(resolve, 2000); })
+    ]);
+  } finally { clearTimeout(cleanupTimer); }
+}
+// Reached only when assertions and browser termination both succeeded. A thrown
+// assertion or cleanup failure exits through Node's normal error path instead.
+process.exit(0);

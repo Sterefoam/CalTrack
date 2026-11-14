@@ -5,6 +5,7 @@ import type { PhotoWeightAssessment } from "@/lib/ai/photo-reference";
 const messages: Record<string, string> = {
   chat_unavailable: "Luna belum dapat tersambung ke mesin AI. Periksa apakah model di server sudah berjalan, lalu coba lagi.",
   chat_timeout: "Luna membutuhkan waktu lebih lama. Pesan belum disimpan; coba lagi dalam percakapan ini.",
+  chat_busy: "Luna sedang menjawab percakapan lain. Tunggu beberapa detik lalu kirim ulang; pesanmu tetap ada.",
   invalid_chat_response: "Jawaban AI belum lengkap. Coba pertanyaan yang lebih singkat.",
   conversation_limit: "Percakapan sudah penuh. Mulai percakapan baru untuk melanjutkan.",
   quest_not_ready: "Quest belum selesai. Lengkapi catatan yang diminta lalu perbarui progres.",

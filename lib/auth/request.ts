@@ -24,7 +24,7 @@ export async function authenticateRequest(request: Request, auth: AuthService, d
   }
   if (!["GET", "HEAD", "OPTIONS"].includes(request.method)) {
     const requestOrigin = request.headers.get("origin");
-    if (requestOrigin && requestOrigin !== origin) return null;
+    if (requestOrigin !== origin || request.headers.get("sec-fetch-site") === "cross-site") return null;
   }
   const session = await auth.api.getSession({ headers: request.headers });
   return session?.user.id ?? null;

@@ -52,6 +52,11 @@ test("email auth, session cookies, JWT verification, origin checks, and revocati
     assert.equal(await authenticateRequest(tampered, auth, database, origin), null);
     assert.equal(await authenticateRequest(bearer, auth, database, "http://other.example.test"), null);
     assert.equal(await authenticateRequest(new Request(`${origin}/api/food-logs`, { method: "POST", headers: { Cookie: cookie, Origin: "https://untrusted.example.test" } }), auth, database, origin), null);
+    assert.equal(await authenticateRequest(new Request(`${origin}/api/food-logs`, { method: "POST", headers: { Cookie: cookie } }), auth, database, origin), null);
+    assert.equal(await authenticateRequest(new Request(`${origin}/api/food-logs`, { method: "POST", headers: { Cookie: cookie, Origin: "null" } }), auth, database, origin), null);
+    assert.equal(await authenticateRequest(new Request(`${origin}/api/food-logs`, { method: "POST", headers: { Cookie: cookie, Origin: origin, "Sec-Fetch-Site": "cross-site" } }), auth, database, origin), null);
+    assert.equal(await authenticateRequest(new Request(`${origin}/api/food-logs`, { method: "POST", headers: { Cookie: cookie, Origin: origin } }), auth, database, origin), account.user.id);
+    assert.equal(await authenticateRequest(new Request(`${origin}/api/food-logs`, { method: "POST", headers: { Authorization: `Bearer ${token}` } }), auth, database, origin), account.user.id);
     const signedOut = await call("sign-out", {}, cookie);
     assert.equal(signedOut.status, 200);
     assert.equal(await authenticateRequest(bearer, auth, database, origin), null);
