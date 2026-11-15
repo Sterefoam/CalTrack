@@ -28,6 +28,8 @@ Foto, teks dan audio dikirim ke Groq saat pengguna menjalankan analisis. Hasil e
 4. Deploy, lalu periksa pendaftaran/login, penyimpanan makanan, isolasi akun, quest/login harian, chatbot, foto dengan acuan, label dan audio. Gunakan origin yang cocok dengan `BETTER_AUTH_URL` untuk pengujian autentikasi.
 5. Batasi unggahan foto/audio 4 MiB agar multipart berada di bawah batas payload Vercel. Jika kuota Groq habis, aplikasi menampilkan kegagalan dan pengguna masih bisa mengisi gizi manual.
 
+Secret Vercel tidak dapat ditarik melalui `vercel env run`. Bila kredensial hanya berada di Vercel, bootstrap database kosong secara eksplisit dengan `vercel deploy --prod --build-env CALTRACK_MIGRATE=1`. Skrip build hanya menerima flag ini pada `VERCEL_ENV=production`; migrasi menggunakan jurnal yang sama. Jangan simpan flag di pengaturan proyek: deployment berikutnya memakai build biasa tanpa migrasi otomatis. Token database saat setup diberi masa berlaku 30 hari dan perlu diganti melalui secret Production sebelum kedaluwarsa, kemudian redeploy.
+
 Pemulihan password lewat email tetap memerlukan konfigurasi pengirim (`RESEND_API_KEY` dan `AUTH_EMAIL_FROM`) yang sudah didukung aplikasi.
 
 ## Hasil validasi integrasi

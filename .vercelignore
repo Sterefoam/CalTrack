@@ -1,4 +1,10 @@
 .git
+.next
+.vercel
+node_modules
+out
+dist
+*.tsbuildinfo
 .caltrack
 .npm-cache
 .taste-skill
