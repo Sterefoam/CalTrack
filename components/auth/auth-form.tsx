@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState, type FormEvent } from "react";
 import { api, jsonRequest } from "@/lib/client/api";
+import { Icon } from "@/components/layout/icon";
 
 export function AuthForm({ mode }: { mode: "login" | "register" }) {
   const register = mode === "register";
@@ -28,9 +29,9 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
   }
 
   return <div className="auth-page">
-    <Link className="brand" href="/" aria-label="CalTrack beranda"><span className="brand-mark" aria-hidden="true"><span /><span /><span /></span><span>cal<span className="brand-accent">track</span></span></Link>
+    <Link className="brand" href="/login" aria-label="CalTrack beranda"><span className="brand-mark" aria-hidden="true"><Icon name="moon" size={26} /></span><span>CalTrack</span></Link>
     <div className="auth-layout">
-      <section className="auth-intro"><h1>{register ? "Mulai kebiasaan baikmu." : "Kembali ke catatanmu."}</h1><p>Satu catatan makan setiap kali. Lebih kenal asupanmu, lebih mudah menjaga tujuanmu.</p><Link className="ui-btn ui-btn-ghost" href="/">Jelajahi dashboard demo</Link></section>
+      <section className="auth-intro"><h1>{register ? "Mulai kebiasaan baikmu." : "Kembali ke catatanmu."}</h1><p>Catat makanan, temui Luna, dan lanjutkan quest harianmu. Profil, catatan, dan hadiah tersimpan di akunmu.</p></section>
       <section className="auth-form-panel" aria-labelledby="auth-title">
         <h2 id="auth-title">{register ? "Daftar CalTrack" : "Masuk ke CalTrack"}</h2>
         <p className="demo-note">Masuk untuk menyimpan profil dan catatan makanan di akunmu.</p>
@@ -46,6 +47,7 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
         </form>
         {!register && <p className="auth-switch"><Link href="/forgot-password">Lupa kata sandi?</Link></p>}
         <p className="auth-switch">{register ? "Sudah punya akun?" : "Baru di CalTrack?"} <Link href={register ? "/login" : "/register"}>{register ? "Masuk" : "Daftar"}</Link></p>
+        <p className="auth-switch auth-demo-link"><Link href="/?demo=1">Lihat contoh tanpa akun</Link><span>Mode demo memakai data contoh.</span></p>
       </section>
     </div>
   </div>;

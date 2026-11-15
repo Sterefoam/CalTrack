@@ -60,6 +60,15 @@ input::placeholder,textarea::placeholder { color: var(--muted); opacity: 1; }
 .content-wrap { max-width: 1360px; padding: 28px 32px 40px; margin: 0 auto; }
 .content-wrap.account-strip { padding-top: 12px; padding-bottom: 0; font-size: 13px; color: var(--muted); }
 .account-strip p { margin: 0; }
+.demo-access-strip { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; padding-bottom: 0; }
+.demo-access-strip p { margin: 0; max-width: 62ch; font-size: 14px; color: var(--muted); }
+.demo-access-strip strong { color: var(--ink); }
+.demo-access-strip > div { display: flex; flex-wrap: wrap; gap: 8px; }
+.shell-login { min-height: 36px; padding: 7px 14px; }
+.auth-demo-link { padding-top: 16px; border-top: 1px solid var(--line); }
+.auth-demo-link a { margin-left: 0; }
+.auth-demo-link span { display: block; margin-top: 8px; color: var(--muted); font-size: 13px; }
+.auth-page .brand > span:last-child { display: block; }
 .welcome-row { align-items: center; margin-bottom: 22px; }
 .welcome-row h1 { font-size: 26px; margin: 0; color: var(--ink); font-weight: 600; }
 .welcome-subtitle { margin-top: 6px; color: var(--muted); font-size: 13px; }

@@ -105,7 +105,17 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
     setConnection("loading");
     try {
       const session = await api<{ user: { id: string; name: string } } | null>("/api/auth/get-session", { signal });
-      if (!session?.user) { await initializeDemo(signal); return; }
+      if (!session?.user) {
+        let demoRequested = new URLSearchParams(window.location.search).get("demo") === "1";
+        try {
+          demoRequested ||= window.sessionStorage.getItem("caltrack-demo") === "1";
+          if (demoRequested) window.sessionStorage.setItem("caltrack-demo", "1");
+        } catch { /* Explicit demo links still work when browser storage is unavailable. */ }
+        if (signal?.aborted) return;
+        if (!demoRequested) { window.location.replace("/login"); return; }
+        await initializeDemo(signal); return;
+      }
+      try { window.sessionStorage.removeItem("caltrack-demo"); } catch { /* Account access does not depend on browser storage. */ }
       const date = localDateString();
       const [stored, logs, daily] = await Promise.all([
         api<{ profile: DemoProfile } | null>("/api/profile", { signal }),
