@@ -1,0 +1,23 @@
+# Use together with compose.yaml on a VPS whose domain points to this server.
+services:
+  app:
+    environment:
+      BETTER_AUTH_URL: https://${CALTRACK_DOMAIN:?Set the CalTrack domain without https or a path}
+  proxy:
+    image: caddy:2.10.2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      CALTRACK_DOMAIN: ${CALTRACK_DOMAIN:?Set the CalTrack domain without https or a path}
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - proxy-data:/data
+      - proxy-config:/config
+    depends_on:
+      - app
+volumes:
+  proxy-data:
+  proxy-config:

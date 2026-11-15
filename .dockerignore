@@ -8,3 +8,7 @@ node_modules
 .ngodingpakeai
 *.db*
 __pycache__
+.codex
+.claude
+.agents
+.playwright-mcp
