@@ -1,5 +1,12 @@
 # Quest pilihan dan animasi pencapaian
 
+Hadiah login harian tersedia di markas dan `/quests`: tekan **Ambil hadiah login**
+untuk memperoleh 10 XP sekali per hari WIB, tanpa perlu mencatat makanan. Hadiah
+berikutnya tersedia pukul 00.00 WIB. Melewatkan hari tidak mengurangi XP dan tidak
+ada bonus yang diklaim otomatis hanya karena membuka halaman. Demo mengarahkan ke
+login. Server menetapkan akun, hari dan XP; ledger `quest_claims` yang sudah ada
+menjaga klaim berulang atau bersamaan tetap satu hadiah. Tidak perlu migrasi baru.
+
 Tiga quest harian lama tetap tersedia dan mempertahankan XP yang sudah dimiliki.
 Halaman `/quests` menampilkan empat pilihan tambahan dari sembilan variasi, berganti
 setiap pukul 00.00 WIB. Akun dapat memilih maksimal dua per hari; pilihan berlaku
@@ -23,6 +30,15 @@ menonaktifkan seluruh gerakan; teks pencapaian tetap dibaca pembaca layar.
 
 Permintaan pembaruan progres yang lebih lama dibatalkan ketika aksi baru dimulai,
 sehingga hasil baca lama tidak menimpa XP atau pilihan quest yang baru disimpan.
+
+Verifikasi hadiah login: build produksi serta 66 dari 67 tes lulus (satu tes
+worker OCR dilewati). Tes waktu mencakup batas 23.59.59 ke 00.00 WIB, isolasi akun,
+klaim ulang dan hari yang terlewat. Uji browser mencakup tombol akun/demo, penolakan
+anonim, empat klaim bersamaan dengan masukan XP/hari palsu yang tetap menghasilkan
+10 XP, dan persistensi setelah reload. Layout diperiksa pada 1440/768/390/320 piksel.
+Inspektor terbaru mencatat 0 FAIL dan satu peringatan ruang 49px di batas bagian
+quest pilihan; ruang ini memisahkan dua kelompok aktivitas. Palet dan tipografi
+petualangan malam yang mengikuti referensi tetap dipakai tanpa redraw arah.
 
 Verifikasi: build produksi dan tes layanan lulus; `scripts/smoke-adventure.mjs`
 menguji kenaikan level, hadiah terbuka, pilihan bersamaan dengan batas dua slot,

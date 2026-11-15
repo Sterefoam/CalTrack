@@ -1,3 +1,4 @@
+export const dailyLoginDefinition = { id: "daily-login", title: "Hadiah login harian", xp: 10 } as const;
 export const questDefinitions = [
   { id: "first-log", title: "Jejak pertama", description: "Catat satu waktu makan hari ini.", target: 1, xp: 20, metric: "meals", href: "/log", unit: "catatan" },
   { id: "meal-rhythm", title: "Ritme harian", description: "Catat dua waktu makan yang berbeda.", target: 2, xp: 35, metric: "types", href: "/log", unit: "waktu makan" },
@@ -40,6 +41,7 @@ export function adventureView(day: string, metrics: QuestMetrics, claimed: strin
     return { ...quest, optional, accepted: selected, progress: Math.min(quest.target, progress), ready: selected && progress >= quest.target, claimed: claimed.includes(quest.id) };
   };
   return { day, totalXp, level: Math.floor(totalXp / 100) + 1, levelXp: totalXp % 100, equippedReward,
+    dailyLogin: { ...dailyLoginDefinition, accepted: true, ready: true, claimed: claimed.includes(dailyLoginDefinition.id) },
     quests: questDefinitions.map(quest => present(quest, false)),
     optionalQuests: dailyOptionalQuests(day).map(quest => present(quest, true)),
     optionalSlotsRemaining: Math.max(0, optionalQuestLimit - accepted.length),

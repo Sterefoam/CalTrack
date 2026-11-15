@@ -5,6 +5,7 @@ import { useDashboardState } from "@/components/dashboard/dashboard-state";
 import { Icon } from "@/components/layout/icon";
 import { useId } from "react";
 import type { Adventure } from "@/lib/adventure/quests";
+import { DailyLogin } from "./daily-login";
 
 function QuestRow({ quest }: { quest: Adventure["quests"][number] }) {
   const { adventure, busy, act } = useAdventure();
@@ -23,6 +24,7 @@ export function QuestBoard({ compact = false }: { compact?: boolean }) {
     <div className="section-title-row"><h2 id={headingId}>Quest harian</h2>{compact ? <Link href="/quests" className="text-button">Hadiah <Icon name="arrow" size={16} /></Link> : <button className="text-button" onClick={refresh}>Perbarui</button>}</div>
     <p className="quest-caption">Langkah kecil tetap berarti. Reset pukul 00.00 WIB.</p>
     {!adventure && !error && <p role="status">Memuat perjalananmu…</p>}
+    <DailyLogin />
     <ul className="quest-list">{adventure?.quests.map(quest => <QuestRow quest={quest} key={quest.id} />)}{compact && adventure?.optionalQuests.filter(quest => quest.accepted).map(quest => <QuestRow quest={quest} key={quest.id} />)}</ul>
     {compact ? <Link href="/quests#quest-pilihan" className="text-button optional-quest-link">Pilih petualangan tambahan <Icon name="arrow" size={14} /></Link> : adventure && <div className="optional-quests" id="quest-pilihan"><div className="section-title-row"><h2>Quest pilihan</h2><span>{2 - adventure.optionalSlotsRemaining}/2 dipilih</span></div><p className="quest-caption">Empat pilihan berganti setiap hari. Pilih maksimal dua untuk hari ini; catatan hari ini juga dihitung. Tidak ada penalti jika belum selesai. Fitur AI membutuhkan mesin analisis yang siap.</p><ul className="quest-list">{adventure.optionalQuests.map(quest => <QuestRow quest={quest} key={quest.id} />)}</ul></div>}
     {error && <p role="alert" className="chat-error">{error} <button className="text-button" onClick={refresh}>Coba lagi</button></p>}

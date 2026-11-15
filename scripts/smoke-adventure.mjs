@@ -18,6 +18,9 @@ page.setDefaultNavigationTimeout(30000);
 const errors = []; page.on('pageerror', error => errors.push(error.message));
 try {
   await page.goto(origin + '/quests');
+  assert.equal((await page.request.post(origin + '/api/adventure', { headers: { Origin: origin }, data: { action: 'claim', questId: 'daily-login' } })).status(), 401);
+  await page.locator('.daily-login').getByRole('link', { name: 'Masuk & ambil' }).waitFor();
+  assert.equal(await page.locator('.daily-login').getByRole('link', { name: 'Masuk & ambil' }).getAttribute('href'), '/login');
   await page.getByRole('button', { name: 'Ambil XP', exact: true }).first().waitFor();
   console.log('Checking demo achievements.');
   for (let i = 0; i < 3; i++) {
@@ -125,13 +128,36 @@ try {
   assert.equal((await read()).equippedReward, 'orbit-cloak');
   await page.reload(); await portrait.locator('[data-outfit="orbit-cloak"]').waitFor();
   assert.equal(await page.locator('.achievement-toast').count(), 0);
+  console.log('Checking daily login UI, duplicate claims and concurrent claims from a new account.');
+  const beforeLogin = await read();
+  await page.getByRole('button', { name: 'Ambil hadiah login', exact: true }).click();
+  await page.getByRole('button', { name: 'Sudah diambil', exact: true }).waitFor();
+  assert.equal(await page.getByRole('button', { name: 'Sudah diambil', exact: true }).isDisabled(), true);
+  assert.equal((await read()).totalXp, beforeLogin.totalXp + 10);
+  assert.match(await page.locator('.daily-login').innerText(), /00.00 WIB/);
+  await page.reload();
+  await page.getByRole('button', { name: 'Sudah diambil', exact: true }).waitFor();
+  assert.equal(await page.locator('.achievement-toast').count(), 0);
+  assert.equal((await act({ action: 'claim', questId: 'daily-login', xp: 99999, day: '2099-01-01', userId: 'someone-else' })).status(), 200);
+  assert.equal((await read()).totalXp, beforeLogin.totalXp + 10);
+  const freshAccount = await browser.newContext();
+  try {
+    const response = await freshAccount.request.post(origin + '/api/auth/sign-up/email', { headers: { Origin: origin }, data: { name: 'Daily Test', email: `daily-${Date.now()}@example.test`, password: randomBytes(24).toString('base64url') } });
+    assert.equal(response.status(), 200);
+    const concurrent = await Promise.all(Array.from({ length: 4 }, () => freshAccount.request.post(origin + '/api/adventure', { headers: { Origin: origin }, data: { action: 'claim', questId: 'daily-login', xp: 9999, day: '2099-01-01' } })));
+    assert(concurrent.every(response => response.status() === 200));
+    const freshState = await (await freshAccount.request.get(origin + '/api/adventure')).json();
+    assert.equal(freshState.totalXp, 10); assert.equal(freshState.dailyLogin.claimed, true);
+    assert.equal(freshState.quests[0].progress, 0);
+    assert.equal((await read()).totalXp, beforeLogin.totalXp + 10, 'Login rewards stay account scoped');
+  } finally { await freshAccount.close(); }
   for (const width of [1440,768,390,320]) {
     await page.setViewportSize({ width, height: 900 });
     assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `Overflow at ${width}`);
     await page.screenshot({ path: `${output}/account-${width}.png`, fullPage: true });
   }
   assert.deepEqual(errors, []);
-  await writeFile(output + '/result.json', JSON.stringify({ passed: true, checks: ['XP and level animation', 'reward unlock', 'locked outfit preview', 'visible clothing and accessories', 'motion pause', 'shared profile and home avatar', 'persisted avatar equipment', 'two optional slots', 'concurrent acceptance cap', 'idempotent claim', 'persisted selection', 'stale read protection', 'reduced motion', 'no replay on reload', 'desktop/tablet/mobile bounds'] }, null, 2));
+  await writeFile(output + '/result.json', JSON.stringify({ passed: true, checks: ['daily login account UI and demo login link', 'anonymous login claim rejected', 'daily login persists after reload', 'concurrent daily login grants only 10 server XP', 'XP and level animation', 'reward unlock', 'locked outfit preview', 'visible clothing and accessories', 'motion pause', 'shared profile and home avatar', 'persisted avatar equipment', 'two optional slots', 'concurrent acceptance cap', 'idempotent claim', 'persisted selection', 'stale read protection', 'reduced motion', 'no replay on reload', 'desktop/tablet/mobile bounds'] }, null, 2));
   console.log('Passed: adventure choices, animation, persistence, concurrency, stale reads and reduced motion.');
 } catch (error) { console.error(error); throw error; } finally {
   // Terminate only this disposable browser. Edge can retain its process after a

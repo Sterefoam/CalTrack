@@ -74,6 +74,35 @@ test("optional quests rotate, require explicit acceptance and enforce two persis
   } finally { client.close(); }
 });
 
+test("daily login is explicit, account-scoped, idempotent and resets at midnight WIB without losing XP", async context => {
+  const client = createClient({ url: ":memory:" });
+  try {
+    const database = drizzle(client, { schema }); await migrate(database, { migrationsFolder: "./drizzle" });
+    await database.insert(schema.users).values(["a", "b"].map(id => ({ id, email: `${id}@example.test`, name: id, passwordHash: "test" })));
+    context.mock.timers.enable({ apis: ["Date"], now: new Date("2026-11-14T16:59:59Z") });
+    const before = await getAdventure("a", database);
+    assert.equal(before.day, "2026-11-14"); assert.equal(before.totalXp, 0);
+    assert.equal(before.dailyLogin.claimed, false); assert.equal(before.dailyLogin.ready, true);
+    assert.equal((await database.select().from(schema.questClaims)).length, 0, "Reading progress never grants XP");
+    assert.equal((await claimQuest("a", "daily-login", database)).totalXp, 10);
+    const duplicate = await claimQuest("a", "daily-login", database);
+    assert.equal(duplicate.totalXp, 10); assert.equal(duplicate.dailyLogin.claimed, true);
+    const other = await getAdventure("b", database);
+    assert.equal(other.totalXp, 0); assert.equal(other.dailyLogin.claimed, false);
+    assert.equal((await claimQuest("b", "daily-login", database)).totalXp, 10);
+    assert.equal((await database.select().from(schema.questClaims).where(eq(schema.questClaims.userId, "a"))).length, 1);
+    context.mock.timers.setTime(new Date("2026-11-14T17:00:00Z").getTime());
+    const midnight = await getAdventure("a", database);
+    assert.equal(midnight.day, "2026-11-15"); assert.equal(midnight.dailyLogin.claimed, false); assert.equal(midnight.totalXp, 10);
+    assert.equal((await claimQuest("a", "daily-login", database)).totalXp, 20);
+    assert.equal((await claimQuest("a", "daily-login", database)).totalXp, 20);
+    context.mock.timers.setTime(new Date("2026-11-20T17:00:00Z").getTime());
+    assert.equal((await getAdventure("a", database)).totalXp, 20, "Missed days do not reduce XP");
+    assert.equal((await claimQuest("a", "daily-login", database)).totalXp, 30);
+    assert.equal((await database.select().from(schema.foodLogs)).length, 0, "Login reward does not require food logs");
+  } finally { client.close(); }
+});
+
 test("celebrations derive from actual XP changes and never replay on unchanged or duplicate claims", () => {
   assert.deepEqual(dailyOptionalQuests(""), []);
   const view = (xp: number, reward = "moon-scout") => adventureView("2026-11-14", { meals: 1, types: 1, foods: 1 }, [], xp, reward);

@@ -25,7 +25,7 @@ export async function getAdventure(userId: string, database = db) { return readS
 export async function claimQuest(userId: string, questId: unknown, database = db) {
   await database.transaction(async tx => {
     const view = await readState(userId, tx);
-    const current = [...view.quests, ...view.optionalQuests].find(item => item.id === questId);
+    const current = [view.dailyLogin, ...view.quests, ...view.optionalQuests].find(item => item.id === questId);
     if (!current) throw new InputError("invalid_quest");
     if (!current.accepted) throw new InputError("quest_not_accepted", 409);
     if (current.claimed) return;

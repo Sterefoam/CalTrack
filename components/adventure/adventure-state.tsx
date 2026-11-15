@@ -47,6 +47,7 @@ export function AdventureProvider({ children }: { children: ReactNode }) {
       let next: Adventure;
       if (mode === "account") { next = await api<Adventure>("/api/adventure", jsonRequest("POST", { action, ...(action === "equip" ? { rewardId: id } : { questId: id }) })); setAdventure(next); }
       else if (action === "claim") {
+        if (id === value.dailyLogin.id) throw new Error("Masuk ke akun untuk mengambil hadiah login harian.");
         const quest = [...value.quests, ...value.optionalQuests].find(item => item.id === id);
         if (!quest?.ready || quest.claimed) return;
         setClaims(current => [...current, id]); setDemoXp(current => current + quest.xp);
@@ -57,7 +58,7 @@ export function AdventureProvider({ children }: { children: ReactNode }) {
       } else { if (!value.rewards.find(item => item.id === id)?.unlocked) return; setEquipped(id); next = adventureView(day, metrics, claims, demoXp, id, accepted); }
       const event = achievementFor(value, next);
       if (event) setCelebration({ ...event, id: Date.now() });
-      setNotice(action === "claim" ? (event ? "Quest selesai. XP ditambahkan ke perjalananmu!" : "XP quest ini sudah pernah diambil.") : action === "accept" ? "Quest pilihan diambil. Catatan hari ini juga dihitung." : "Hadiah dipakai pada penjelajahmu.");
+      setNotice(action === "claim" ? (id === value.dailyLogin.id ? (event ? "Hadiah login diambil. Sampai jumpa besok!" : "Hadiah login hari ini sudah diambil.") : event ? "Quest selesai. XP ditambahkan ke perjalananmu!" : "XP quest ini sudah pernah diambil.") : action === "accept" ? "Quest pilihan diambil. Catatan hari ini juga dihitung." : "Hadiah dipakai pada penjelajahmu.");
     } catch (cause) { setError(cause instanceof Error ? cause.message : "Hadiah belum berhasil disimpan."); }
     finally { lock.current = false; setBusy(false); }
   }
