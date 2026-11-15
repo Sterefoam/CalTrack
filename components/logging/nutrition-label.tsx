@@ -37,7 +37,7 @@ export function NutritionLabelCapture() {
 
   function choose(next?: File) {
     if (!next) return;
-    if (!["image/jpeg", "image/png", "image/webp"].includes(next.type) || next.size === 0 || next.size > 10 * 1024 * 1024) { setError("Pilih foto JPG, PNG, atau WebP, lebih dari 0 dan maksimal 10 MB."); return; }
+    if (!["image/jpeg", "image/png", "image/webp"].includes(next.type) || next.size === 0 || next.size > 4 * 1024 * 1024) { setError("Pilih foto JPG, PNG, atau WebP, lebih dari 0 dan maksimal 4 MB."); return; }
     run.current?.abort(); setBusy(false); setError(""); setResult(null); setFile(next);
   }
   async function scan() {
@@ -62,7 +62,7 @@ export function NutritionLabelCapture() {
       <input ref={camera} type="file" accept="image/jpeg,image/png,image/webp" capture="environment" className="sr-only" tabIndex={-1} aria-label="Foto tabel dengan kamera" onChange={event => { choose(event.target.files?.[0]); event.target.value = ""; }} />
       <button className="ui-btn" type="button" onClick={() => camera.current?.click()}>Ambil foto tabel</button>
       {preview && <img src={preview} alt="Pratinjau tabel nutrisi yang dipilih" className="max-h-96 w-full rounded-box object-contain" onError={() => { run.current?.abort(); setBusy(false); setFile(null); setResult(null); setError("Foto tidak dapat dibuka. Pilih gambar lain."); }} />}
-      <p className="text-sm leading-relaxed text-base-content/70">JPG, PNG, atau WebP, maksimal 10 MB. {mode === "account" ? language === "auto" ? "Saat kamu menekan Baca label, foto dikirim ke server dan layanan AI." : "Foto dibaca di server tanpa dikirim ke layanan AI. Pilih bahasa yang cocok dan tampilkan satu kolom gizi dengan jelas." : "Contoh dapat dicoba tanpa foto."}</p>
+      <p className="text-sm leading-relaxed text-base-content/70">JPG, PNG, atau WebP, maksimal 4 MB. {mode === "account" ? language === "auto" ? "Saat kamu menekan Baca label, foto dikirim ke server dan layanan AI." : "Foto dibaca di server tanpa dikirim ke layanan AI. Pilih bahasa yang cocok dan tampilkan satu kolom gizi dengan jelas." : "Contoh dapat dicoba tanpa foto."}</p>
       <button className="ui-btn w-full" type="button" disabled={busy || (mode === "account" && !file)} onClick={scan}>{busy ? "Membaca label..." : mode === "demo" ? "Coba contoh label" : "Baca label"}</button>
       {busy && <button className="ui-btn ui-btn-ghost" type="button" onClick={() => { run.current?.abort(); setBusy(false); }}>Batalkan</button>}
       {error && <p className="ui-alert ui-alert-error" role="alert">{error}</p>}

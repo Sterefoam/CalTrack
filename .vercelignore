@@ -1,0 +1,17 @@
+.git
+.caltrack
+.npm-cache
+.taste-skill
+.agents
+.codex
+.ngodingpakeai
+.playwright-mcp
+.env*
+*.db
+*.db-shm
+*.db-wal
+tests
+docs
+scripts/ml
+scripts/ocr
+**/__pycache__

@@ -3,7 +3,10 @@ import type { DemoFoodLog, FoodItem, MealType } from "@/lib/demo/nutrition-data"
 import type { PhotoWeightAssessment } from "@/lib/ai/photo-reference";
 
 const messages: Record<string, string> = {
-  chat_unavailable: "Luna belum dapat tersambung ke mesin AI. Periksa apakah model di server sudah berjalan, lalu coba lagi.",
+  payload_too_large: "Unggahan terlalu besar. Pilih foto atau audio maksimal 4 MB.",
+  invalid_photo_size: "Ukuran foto harus lebih dari 0 dan maksimal 4 MB.",
+  invalid_audio_size: "Ukuran audio harus lebih dari 0 dan maksimal 4 MB.",
+  chat_unavailable: "Luna belum dapat tersambung ke mesin AI. Periksa pengaturan layanan AI, lalu coba lagi.",
   chat_timeout: "Luna membutuhkan waktu lebih lama. Pesan belum disimpan; coba lagi dalam percakapan ini.",
   chat_busy: "Luna sedang menjawab percakapan lain. Tunggu beberapa detik lalu kirim ulang; pesanmu tetap ada.",
   invalid_chat_response: "Jawaban AI belum lengkap. Coba pertanyaan yang lebih singkat.",
@@ -33,7 +36,7 @@ export async function api<T>(path: string, options: RequestInit = {}, timeoutMs 
   try { response = await fetch(path, { ...options, credentials: "same-origin", cache: "no-store", signal: options.signal ? AbortSignal.any([options.signal, AbortSignal.timeout(timeoutMs)]) : AbortSignal.timeout(timeoutMs) }); }
   catch (error) { if (options.signal?.aborted) throw error; throw new Error("Koneksi ke server gagal. Periksa riwayat sebelum mengulangi penyimpanan untuk menghindari catatan ganda."); }
   const data = response.status === 204 ? null : await response.json().catch(() => null);
-  if (!response.ok) throw new Error(messages[data?.error] ?? (response.status === 401 ? messages.authentication_required : "Permintaan belum berhasil. Coba lagi; catatanmu tetap ada di formulir."));
+  if (!response.ok) throw new Error(messages[data?.error] ?? (response.status === 413 ? messages.payload_too_large : response.status === 401 ? messages.authentication_required : "Permintaan belum berhasil. Coba lagi; catatanmu tetap ada di formulir."));
   return data as T;
 }
 export const jsonRequest = (method: string, value: unknown): RequestInit => ({ method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(value) });

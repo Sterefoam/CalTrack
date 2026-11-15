@@ -6,7 +6,7 @@ export type VoiceAnalysisResponse = { items: FoodItem[]; confidenceScore: number
 
 // Respons stub untuk layer frontend; belum mengirim audio ke layanan transkripsi.
 export async function analyzeFoodVoice({ audio }: VoiceAnalysisRequest, signal: AbortSignal): Promise<VoiceAnalysisResponse> {
-  if (!audio.size || audio.size > 10 * 1024 * 1024 || !audio.type.startsWith("audio/")) throw new Error("Pilih rekaman audio yang valid, maksimal 10 MB.");
+  if (!audio.size || audio.size > 4 * 1024 * 1024 || !audio.type.startsWith("audio/")) throw new Error("Pilih rekaman audio yang valid, maksimal 4 MB.");
   await new Promise<void>((resolve, reject) => {
     if (signal.aborted) { reject(new DOMException("Dibatalkan", "AbortError")); return; }
     const abort = () => { clearTimeout(timer); reject(new DOMException("Dibatalkan", "AbortError")); };

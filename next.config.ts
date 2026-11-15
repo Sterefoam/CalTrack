@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  distDir: process.env.CALTRACK_BUILD_DIR ?? ".next",
   outputFileTracingRoot: process.cwd(),
   serverExternalPackages: ["tesseract.js", "tesseract.js-core"],
   async headers() {

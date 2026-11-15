@@ -15,7 +15,7 @@ export async function readConversation(userId: string, id: string, database = db
 export async function listConversations(userId: string, database = db) {
   return database.select().from(chatConversations).where(eq(chatConversations.userId, userId)).orderBy(desc(chatConversations.updatedAt)).limit(50);
 }
-export async function sendNutritionMessage(userId: string, body: unknown, signal: AbortSignal, options: { database?: typeof db; fetcher?: typeof fetch; apiKey?: string; model?: string; provider?: "ollama" | "openai"; baseUrl?: string } = {}) {
+export async function sendNutritionMessage(userId: string, body: unknown, signal: AbortSignal, options: { database?: typeof db; fetcher?: typeof fetch; apiKey?: string; model?: string; provider?: "ollama" | "openai" | "groq"; baseUrl?: string } = {}) {
   if (!body || typeof body !== "object" || Array.isArray(body)) throw new InputError("invalid_chat_message");
   const input = body as Record<string, unknown>;
   if (typeof input.message !== "string" || !input.message.trim() || input.message.trim().length > 500 || (input.conversationId !== undefined && (typeof input.conversationId !== "string" || !input.conversationId || input.conversationId.length > 128))) throw new InputError("invalid_chat_message");

@@ -1,6 +1,6 @@
 import { InputError } from "./json";
 
-export async function readMultipart(request: Request, maxBytes = 10 * 1024 * 1024 + 65536) {
+export async function readMultipart(request: Request, maxBytes = 4 * 1024 * 1024 + 65536) {
   const contentType = request.headers.get("content-type") ?? "";
   if (!contentType.toLowerCase().startsWith("multipart/form-data;")) throw new InputError("multipart_required", 415);
   if (Number(request.headers.get("content-length")) > maxBytes) throw new InputError("payload_too_large", 413);

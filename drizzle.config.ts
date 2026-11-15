@@ -1,12 +1,11 @@
 import { defineConfig } from "drizzle-kit";
+import { databaseConfiguration } from "./db/config";
 
 export default defineConfig({
   dialect: "sqlite",
   schema: "./db/schema.ts",
   out: "./drizzle",
-  dbCredentials: {
-    url: process.env.DATABASE_URL ?? "file:./caltrack.db"
-  },
+  dbCredentials: databaseConfiguration(),
   strict: true,
   verbose: true
 });

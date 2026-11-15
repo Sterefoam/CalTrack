@@ -4,7 +4,7 @@ import { parsePhotoReference, parseReferencedPhoto, referencedPhotoSchema, type 
 import { requestVisionJson } from "./vision-request";
 
 export async function normalizePhoto(file: File, maxEdge = 1600) {
-  if (!file.size || file.size > 10 * 1024 * 1024) throw new AnalysisError("invalid_photo_size", 413);
+  if (!file.size || file.size > 4 * 1024 * 1024) throw new AnalysisError("invalid_photo_size", 413);
   const formats: Record<string, string> = { "image/jpeg": "jpeg", "image/png": "png", "image/webp": "webp" };
   if (!formats[file.type]) throw new AnalysisError("unsupported_photo", 415);
   try {

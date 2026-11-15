@@ -2,6 +2,7 @@
   "name": "caltrack",
   "version": "0.1.0",
   "private": true,
+  "engines": { "node": "22.x" },
   "scripts": {
     "test": "tsx --test tests/*.test.ts tests/*.test.mjs",
     "ocr:prepare": "node scripts/ocr/prepare.mjs",
@@ -12,6 +13,7 @@
     "start": "next start",
     "db:generate": "node scripts/drizzle-kit.cjs generate",
     "db:migrate": "node scripts/drizzle-kit.cjs migrate",
+    "db:migrate:remote": "tsx scripts/migrate-remote.ts",
     "db:studio": "node scripts/drizzle-kit.cjs studio"
   },
   "dependencies": {

@@ -1,17 +1,18 @@
+import { hostedConfiguration } from "@/lib/ai/provider-config";
 import { AnalysisError } from "@/lib/ai/food-analysis";
 
 type Message = { role: string; content: string };
-type ProviderOptions = { fetcher?: typeof fetch; apiKey?: string; model?: string; provider?: "ollama" | "openai"; baseUrl?: string };
+export type ProviderOptions = { fetcher?: typeof fetch; apiKey?: string; model?: string; provider?: "ollama" | "openai" | "groq"; baseUrl?: string };
 
-function configuration(options: ProviderOptions) {
+function configuration(options: ProviderOptions): { provider: "ollama" | "openai" | "groq"; model: string; baseUrl: string } {
   const provider = options.provider ?? (options.apiKey ? "openai" : process.env.CHAT_PROVIDER ?? "ollama");
-  if (provider !== "ollama" && provider !== "openai") throw new AnalysisError("ai_not_configured", 503);
-  return { provider, model: options.model ?? (provider === "ollama" ? process.env.OLLAMA_MODEL ?? "qwen3:4b-instruct" : process.env.OPENAI_MODEL ?? "gpt-4o"), baseUrl: (options.baseUrl ?? process.env.OLLAMA_BASE_URL ?? "http://127.0.0.1:11434").replace(/\/$/, "") };
+  if (provider !== "ollama" && provider !== "openai" && provider !== "groq") throw new AnalysisError("ai_not_configured", 503);
+  return { provider, model: provider === "ollama" ? options.model ?? process.env.OLLAMA_MODEL ?? "qwen3:4b-instruct" : hostedConfiguration({ ...options, provider }, "chat").model, baseUrl: (options.baseUrl ?? process.env.OLLAMA_BASE_URL ?? "http://127.0.0.1:11434").replace(/\/$/, "") };
 }
 
 export async function chatStatus(options: ProviderOptions = {}) {
   const { provider, model, baseUrl } = configuration(options);
-  if (provider === "openai") return { provider, model, ready: !!(options.apiKey ?? process.env.OPENAI_API_KEY) };
+  if (provider !== "ollama") return { provider, model, ready: !!hostedConfiguration({ ...options, provider }, "chat").apiKey };
   try {
     const response = await (options.fetcher ?? fetch)(`${baseUrl}/api/tags`, { signal: AbortSignal.timeout(2500), cache: "no-store" });
     const data = response.ok ? await response.json() : null;
@@ -21,15 +22,16 @@ export async function chatStatus(options: ProviderOptions = {}) {
 
 export async function generateNutritionReply(messages: Message[], signal: AbortSignal, options: ProviderOptions = {}) {
   const { provider, model, baseUrl } = configuration(options);
-  const apiKey = options.apiKey ?? process.env.OPENAI_API_KEY;
-  if (provider === "openai" && !apiKey) throw new AnalysisError("ai_not_configured", 503);
+  const hosted = provider === "ollama" ? null : hostedConfiguration({ ...options, provider }, "chat");
+  const apiKey = hosted?.apiKey;
+  if (provider !== "ollama" && !apiKey) throw new AnalysisError("ai_not_configured", 503);
   const combined = AbortSignal.any([signal, AbortSignal.timeout(provider === "ollama" ? 110000 : 20000)]);
   try {
-    const response = await (options.fetcher ?? fetch)(provider === "ollama" ? `${baseUrl}/api/chat` : "https://api.openai.com/v1/chat/completions", {
-      method: "POST", signal: combined, headers: { "Content-Type": "application/json", ...(provider === "openai" ? { Authorization: `Bearer ${apiKey}` } : {}) },
-      body: JSON.stringify(provider === "ollama" ? { model, messages, stream: false, think: false, keep_alive: "10m", options: { temperature: 0.4, num_predict: 850, num_ctx: 8192 } } : { model, messages, store: false, max_completion_tokens: 850 })
+    const response = await (options.fetcher ?? fetch)(provider === "ollama" ? `${baseUrl}/api/chat` : `${hosted!.baseUrl}/chat/completions`, {
+      method: "POST", signal: combined, headers: { "Content-Type": "application/json", ...(provider !== "ollama" ? { Authorization: `Bearer ${apiKey}` } : {}) },
+      body: JSON.stringify(provider === "ollama" ? { model, messages, stream: false, think: false, keep_alive: "10m", options: { temperature: 0.4, num_predict: 850, num_ctx: 8192 } } : { model, messages, max_completion_tokens: 850, ...hosted!.parameters })
     });
-    if (!response.ok) throw new AnalysisError("chat_unavailable", 503);
+    if (!response.ok) throw new AnalysisError(response.status === 429 ? "ai_rate_limited" : "chat_unavailable", 503);
     const data = await response.json();
     const choice = data.choices?.[0];
     const content = provider === "ollama" ? data.message?.content : choice?.message?.content;
