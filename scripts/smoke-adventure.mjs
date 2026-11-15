@@ -17,6 +17,8 @@ page.setDefaultTimeout(15000);
 page.setDefaultNavigationTimeout(30000);
 const errors = []; page.on('pageerror', error => errors.push(error.message));
 try {
+  await page.goto(origin + '/?demo=1');
+  await page.locator('.demo-access-strip').waitFor();
   await page.goto(origin + '/quests');
   assert.equal((await page.request.post(origin + '/api/adventure', { headers: { Origin: origin }, data: { action: 'claim', questId: 'daily-login' } })).status(), 401);
   await page.locator('.daily-login').getByRole('link', { name: 'Masuk & ambil' }).waitFor();
